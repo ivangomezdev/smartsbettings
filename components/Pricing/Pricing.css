@@ -21,8 +21,8 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  filter: saturate(0.78) contrast(1.08);
-  opacity: 0.16;
+  filter: saturate(1) contrast(1.08);
+  opacity: 1;
 }
 
 .pricing::after {

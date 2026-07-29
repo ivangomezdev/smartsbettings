@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { shouldSkipImageOptimization } from "../../lib/image.js";
 import { Button } from "../Button/Button.jsx";
+import { HeroBackgroundVideo } from "./HeroBackgroundVideo.jsx";
 
 const heroStats = [
   { value: "24/7", label: "Monitoreo" },
@@ -28,6 +29,9 @@ const opportunities = [
 export function Hero() {
   return (
     <section className="hero" id="inicio">
+      <div className="hero__media" aria-hidden="true">
+        <HeroBackgroundVideo />
+      </div>
       <div className="hero__ambient" aria-hidden="true" />
       <div className="hero__grid u-container">
         <div className="hero__content">

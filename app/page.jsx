@@ -1,5 +1,6 @@
 import { Header } from "../components/Header/Header.jsx";
 import { Hero } from "../components/Hero/Hero";
+import { ScrollReveal } from "../components/ScrollReveal/ScrollReveal";
 import { Platform } from "../components/Platform/Platform";
 import { HowItWorks } from "../components/HowItWorks/HowItWorks";
 import { Pricing } from "../components/Pricing/Pricing";
@@ -11,6 +12,7 @@ import { Footer } from "../components/Footer/Footer";
 export default function HomePage() {
   return (
     <>
+      <ScrollReveal />
       <Header />
       <main>
         <Hero />

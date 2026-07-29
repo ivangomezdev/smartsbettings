@@ -1,0 +1,25 @@
+.section-reveal {
+  filter: blur(0.45rem);
+  opacity: 0;
+  transform: translate3d(0, 3rem, 0) scale(0.985);
+  transition:
+    filter 700ms var(--ease-standard),
+    opacity 700ms var(--ease-standard),
+    transform 850ms var(--ease-standard);
+  will-change: filter, opacity, transform;
+}
+
+.section-reveal.section-reveal--visible {
+  filter: none;
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-reveal,
+  .section-reveal.section-reveal--visible {
+    filter: none;
+    opacity: 1;
+    transform: none;
+  }
+}
