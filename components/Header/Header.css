@@ -25,13 +25,11 @@
 }
 
 .header__logo-frame {
-  border: var(--border-thin) solid var(--color-border-strong);
-  border-radius: var(--radius-circle);
   display: block;
-  height: var(--logo-size);
+  height: var(--logo-frame-height);
   overflow: hidden;
   position: relative;
-  width: var(--logo-size);
+  width: var(--logo-frame-width);
 }
 
 .header__logo {

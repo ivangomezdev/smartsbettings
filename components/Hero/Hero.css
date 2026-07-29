@@ -40,7 +40,7 @@
 .hero__background-watermark {
   animation: hero-watermark-drift 9s ease-in-out infinite alternate;
   aspect-ratio: 1;
-  background-image: url("/smartbetting-logo.jpeg");
+  background-image: url("/smartbettting-logotrans.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -258,7 +258,7 @@
   background-color: var(--color-surface-soft);
   border: var(--border-thin) solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
   transition:
     border-color var(--duration-fast) var(--ease-standard),
     transform var(--duration-fast) var(--ease-standard);
@@ -296,7 +296,7 @@
 .hero__event {
   color: var(--color-text);
   font-size: var(--font-size-lg);
-  margin: var(--spacing-lg) var(--position-zero);
+  margin: var(--spacing-md) var(--position-zero);
 }
 
 .hero__edge {

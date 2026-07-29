@@ -9,10 +9,10 @@ export function Footer() {
           <a className="footer__brand" href="#inicio" aria-label="Volver al inicio">
             <Image
               className="footer__logo"
-              src="/smartbetting-logo.jpeg"
+              src="/smartbettting-logotrans.png"
               alt="SmartBetting"
-              width={1254}
-              height={1254}
+              width={1024}
+              height={1024}
               unoptimized={shouldSkipImageOptimization}
             />
           </a>

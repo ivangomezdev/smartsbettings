@@ -1,0 +1,45 @@
+.text-highlight-reveal {
+  color: var(--color-text);
+  display: inline-block;
+  isolation: isolate;
+  padding-inline: var(--spacing-2xs);
+  position: relative;
+  transition:
+    color var(--duration-highlight-color) var(--ease-standard)
+    var(--delay-highlight-color);
+}
+
+.text-highlight-reveal::before {
+  background-color: var(--color-primary);
+  content: "";
+  inset: var(--position-zero);
+  position: absolute;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--duration-highlight) var(--ease-highlight);
+  z-index: -1;
+}
+
+.text-highlight-reveal--visible {
+  color: var(--color-ink);
+}
+
+.text-highlight-reveal--visible::before {
+  transform: scaleX(1);
+}
+
+.text-highlight-reveal__text {
+  position: relative;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-highlight-reveal {
+    color: var(--color-ink);
+    transition: none;
+  }
+
+  .text-highlight-reveal::before {
+    transform: scaleX(1);
+    transition: none;
+  }
+}

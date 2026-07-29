@@ -7,35 +7,35 @@ const testimonials = [
       "Lo que más valoro es ver el margen y las cuotas sin tener que saltar entre diez pestañas.",
     name: "Carlos M.",
     role: "Usuario de arbitraje",
-    initials: "CM",
+    avatar: "/testimonial-carlos.jpg",
   },
   {
     quote:
       "La información llega ordenada. Puedo revisar el contexto y decidir con calma, sin perseguir ruido.",
     name: "Andrea R.",
     role: "Seguidora de predicciones",
-    initials: "AR",
+    avatar: "/testimonial-andrea.jpg",
   },
   {
     quote:
       "La plataforma se siente hecha para actuar rápido, pero también para mantener control del riesgo.",
     name: "Miguel T.",
     role: "Apostador deportivo",
-    initials: "MT",
+    avatar: "/testimonial-miguel.jpg",
   },
   {
     quote:
       "El diseño es directo y elegante. Entiendo la oportunidad sin perder tiempo interpretando tablas complicadas.",
     name: "Valeria G.",
     role: "Usuaria de arbitraje",
-    initials: "VG",
+    avatar: "/testimonial-valeria.jpg",
   },
   {
     quote:
       "Me gusta que el análisis no intenta vender certezas. Presenta los datos y me permite decidir con criterio.",
     name: "Diego S.",
     role: "Seguidor de predicciones",
-    initials: "DS",
+    avatar: "/testimonial-diego.jpg",
   },
 ];
 

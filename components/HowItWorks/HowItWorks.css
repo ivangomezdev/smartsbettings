@@ -76,15 +76,17 @@
 .how-it-works__number {
   color: var(--color-primary);
   font-family: var(--font-heading);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-step-number);
   font-weight: var(--font-weight-bold);
-  letter-spacing: var(--letter-spacing-label);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  text-shadow: var(--shadow-text-primary);
 }
 
 .how-it-works__title {
   color: var(--color-text);
   font-size: var(--font-size-2xl);
-  margin-top: var(--spacing-2xl);
+  margin-top: var(--spacing-xl);
 }
 
 .how-it-works__copy {

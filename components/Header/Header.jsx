@@ -18,7 +18,7 @@ export function Header() {
           <span className="header__logo-frame">
             <Image
               className="header__logo"
-              src="/smartbetting-logo.jpeg"
+              src="/smartbettting-logotrans.png"
               alt=""
               width={240}
               height={240}

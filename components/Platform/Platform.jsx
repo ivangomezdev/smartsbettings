@@ -1,4 +1,5 @@
 import { SectionHeading } from "../SectionHeading/SectionHeading.jsx";
+import { TextHighlightReveal } from "../TextHighlightReveal/TextHighlightReveal.jsx";
 
 const benefits = [
   {
@@ -27,7 +28,14 @@ export function Platform() {
       <div className="platform__inner u-container">
         <SectionHeading
           eyebrow="La plataforma"
-          title="Todo lo importante. Nada de ruido."
+          title={
+            <>
+              <span className="platform__title-line">
+                Todo lo importante.
+              </span>
+              <TextHighlightReveal>Nada de ruido.</TextHighlightReveal>
+            </>
+          }
           description="Una interfaz diseñada para identificar rápido qué está pasando, por qué importa y cuál es el siguiente paso."
         />
         <div className="platform__layout">

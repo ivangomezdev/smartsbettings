@@ -3,6 +3,10 @@
   border-bottom: var(--border-thin) solid var(--color-border);
 }
 
+.platform__title-line {
+  display: block;
+}
+
 .platform__layout {
   display: grid;
   gap: var(--spacing-3xl);

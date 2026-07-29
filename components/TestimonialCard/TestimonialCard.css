@@ -118,17 +118,23 @@
 }
 
 .testimonial-card__avatar {
-  align-items: center;
-  background: var(--gradient-avatar);
-  border: var(--border-thin) solid var(--color-glass-border);
+  background-color: var(--color-surface-deep);
+  border: var(--avatar-ring-width) solid var(--color-primary);
   border-radius: var(--radius-circle);
-  color: var(--color-primary);
-  display: flex;
-  font-family: var(--font-heading);
-  font-weight: var(--font-weight-bold);
+  box-shadow: var(--shadow-avatar-ring);
+  display: block;
+  flex: 0 0 auto;
   height: var(--avatar-size);
-  justify-content: center;
+  overflow: hidden;
+  padding: var(--avatar-ring-gap);
   width: var(--avatar-size);
+}
+
+.testimonial-card__avatar-image {
+  border-radius: var(--radius-circle);
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
 }
 
 .testimonial-card__identity {

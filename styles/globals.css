@@ -4,6 +4,7 @@
 @import "./utilities.css";
 @import "../components/Button/Button.css";
 @import "../components/SectionHeading/SectionHeading.css";
+@import "../components/TextHighlightReveal/TextHighlightReveal.css";
 @import "../components/ScrollReveal/ScrollReveal.css";
 @import "../components/Header/Header.css";
 @import "../components/Hero/Hero.css";

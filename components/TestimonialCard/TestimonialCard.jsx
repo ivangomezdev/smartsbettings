@@ -1,4 +1,7 @@
-export function TestimonialCard({ quote, name, role, initials }) {
+import Image from "next/image";
+import { shouldSkipImageOptimization } from "../../lib/image.js";
+
+export function TestimonialCard({ quote, name, role, avatar }) {
   return (
     <article className="testimonial-card">
       <div className="testimonial-card__top">
@@ -15,8 +18,16 @@ export function TestimonialCard({ quote, name, role, initials }) {
       </span>
       <blockquote className="testimonial-card__quote">{quote}</blockquote>
       <div className="testimonial-card__person">
-        <span className="testimonial-card__avatar" aria-hidden="true">
-          {initials}
+        <span className="testimonial-card__avatar">
+          <Image
+            className="testimonial-card__avatar-image"
+            src={avatar}
+            alt=""
+            width={256}
+            height={256}
+            sizes="2.75rem"
+            unoptimized={shouldSkipImageOptimization}
+          />
         </span>
         <div className="testimonial-card__identity">
           <p className="testimonial-card__name">{name}</p>

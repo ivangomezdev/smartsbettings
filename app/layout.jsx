@@ -58,8 +58,8 @@ export async function generateMetadata() {
       images: ["/og.png"],
     },
     icons: {
-      icon: "/smartbetting-logo.jpeg",
-      shortcut: "/smartbetting-logo.jpeg",
+      icon: "/smartbettting-logotrans.png",
+      shortcut: "/smartbettting-logotrans.png",
     },
   };
 }
