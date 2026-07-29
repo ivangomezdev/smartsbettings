@@ -92,11 +92,7 @@
 }
 
 .hero__ambient {
-  background:
-    radial-gradient(circle at 78% 34%, var(--color-primary-halo), transparent 34%),
-    linear-gradient(var(--color-grid) var(--border-thin), transparent var(--border-thin)),
-    linear-gradient(90deg, var(--color-grid) var(--border-thin), transparent var(--border-thin));
-  background-size: auto, var(--grid-size) var(--grid-size), var(--grid-size) var(--grid-size);
+  background: radial-gradient(circle at 78% 34%, var(--color-primary-halo), transparent 34%);
   inset: var(--position-zero);
   mask-image: linear-gradient(to bottom, var(--color-ink), transparent 88%);
   pointer-events: none;
