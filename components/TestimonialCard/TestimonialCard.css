@@ -1,42 +1,126 @@
 .testimonial-card {
-  background-color: var(--color-surface-soft);
-  border: var(--border-thin) solid var(--color-border);
-  border-radius: var(--radius-lg);
+  backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturation-glass));
+  background: var(--gradient-testimonial-card);
+  border: var(--border-thin) solid var(--color-glass-border);
+  border-radius: var(--radius-testimonial);
+  box-shadow: var(--shadow-glass);
   display: flex;
   flex-direction: column;
-  min-height: 100%;
-  padding: var(--spacing-xl);
+  min-height: 17rem;
+  overflow: hidden;
+  padding: var(--spacing-lg);
+  position: relative;
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+}
+
+.testimonial-card::before {
+  background: var(--gradient-glass-sheen);
+  content: "";
+  height: var(--glass-sheen-height);
+  left: var(--glass-sheen-left);
+  opacity: var(--opacity-glass-sheen);
+  pointer-events: none;
+  position: absolute;
+  top: var(--glass-sheen-top);
+  transform: rotate(var(--angle-glass-sheen));
+  width: var(--glass-sheen-width);
+}
+
+.testimonial-card::after {
+  background-color: var(--color-primary);
+  border-radius: var(--radius-circle);
+  bottom: var(--glass-glow-offset);
+  box-shadow: var(--shadow-glass-glow);
+  content: "";
+  height: var(--glass-glow-size);
+  opacity: var(--opacity-glass-glow);
+  pointer-events: none;
+  position: absolute;
+  right: var(--glass-glow-offset);
+  width: var(--glass-glow-size);
+}
+
+.testimonial-card:hover {
+  border-color: var(--color-glass-border-hover);
+  box-shadow: var(--shadow-glass-hover);
+  transform: translateY(var(--offset-lift));
+}
+
+.testimonial-card__top {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: var(--z-content);
 }
 
 .testimonial-card__stars {
   color: var(--color-primary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-stars);
+  text-shadow: var(--shadow-text-primary);
+}
+
+.testimonial-card__verified {
+  align-items: center;
+  color: var(--color-text-subtle);
+  display: inline-flex;
+  font-size: var(--font-size-2xs);
+  gap: var(--spacing-xs);
   letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.testimonial-card__verified-dot {
+  background-color: var(--color-primary);
+  border-radius: var(--radius-circle);
+  box-shadow: var(--shadow-dot);
+  height: var(--verified-dot-size);
+  width: var(--verified-dot-size);
+}
+
+.testimonial-card__quote-mark {
+  color: var(--color-glass-quote);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-quote-mark);
+  height: var(--quote-mark-height);
+  line-height: var(--line-height-tight);
+  margin-top: var(--spacing-md);
+  position: relative;
+  z-index: var(--z-content);
 }
 
 .testimonial-card__quote {
   color: var(--color-text);
   flex: 1;
-  font-family: var(--font-heading);
-  font-size: var(--font-size-xl);
+  font-family: var(--font-body);
+  font-size: var(--font-size-testimonial);
   font-weight: var(--font-weight-medium);
-  line-height: var(--line-height-snug);
-  margin-top: var(--spacing-xl);
+  letter-spacing: var(--letter-spacing-testimonial);
+  line-height: var(--line-height-testimonial);
+  margin-top: var(--spacing-md);
+  position: relative;
+  z-index: var(--z-content);
 }
 
 .testimonial-card__person {
   align-items: center;
-  border-top: var(--border-thin) solid var(--color-border);
+  border-top: var(--border-thin) solid var(--color-glass-divider);
   display: flex;
   gap: var(--spacing-md);
   margin-top: var(--spacing-xl);
   padding-top: var(--spacing-lg);
+  position: relative;
+  z-index: var(--z-content);
 }
 
 .testimonial-card__avatar {
   align-items: center;
-  background-color: var(--color-primary-soft);
-  border: var(--border-thin) solid var(--color-border-primary);
+  background: var(--gradient-avatar);
+  border: var(--border-thin) solid var(--color-glass-border);
   border-radius: var(--radius-circle);
   color: var(--color-primary);
   display: flex;
@@ -45,6 +129,10 @@
   height: var(--avatar-size);
   justify-content: center;
   width: var(--avatar-size);
+}
+
+.testimonial-card__identity {
+  min-width: var(--position-zero);
 }
 
 .testimonial-card__name {
@@ -56,4 +144,18 @@
   color: var(--color-text-subtle);
   font-size: var(--font-size-xs);
   margin-top: var(--spacing-2xs);
+}
+
+.testimonial-card__brand-mark {
+  color: var(--color-glass-brand);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-2xl);
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .testimonial-card {
+    min-height: var(--testimonial-card-height);
+    padding: var(--spacing-xl);
+  }
 }

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { shouldSkipImageOptimization } from "../../lib/image.js";
 import { Button } from "../Button/Button.jsx";
 
 const heroStats = [
@@ -68,6 +69,7 @@ export function Hero() {
               width={1254}
               height={1254}
               priority
+              unoptimized={shouldSkipImageOptimization}
             />
           </div>
           <div className="hero__terminal">

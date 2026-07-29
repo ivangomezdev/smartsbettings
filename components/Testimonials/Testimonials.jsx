@@ -1,5 +1,5 @@
 import { SectionHeading } from "../SectionHeading/SectionHeading.jsx";
-import { TestimonialCard } from "../TestimonialCard/TestimonialCard";
+import { TestimonialsCarousel } from "../TestimonialsCarousel/TestimonialsCarousel.jsx";
 
 const testimonials = [
   {
@@ -23,21 +23,36 @@ const testimonials = [
     role: "Apostador deportivo",
     initials: "MT",
   },
+  {
+    quote:
+      "El diseño es directo y elegante. Entiendo la oportunidad sin perder tiempo interpretando tablas complicadas.",
+    name: "Valeria G.",
+    role: "Usuaria de arbitraje",
+    initials: "VG",
+  },
+  {
+    quote:
+      "Me gusta que el análisis no intenta vender certezas. Presenta los datos y me permite decidir con criterio.",
+    name: "Diego S.",
+    role: "Seguidor de predicciones",
+    initials: "DS",
+  },
 ];
 
 export function Testimonials() {
   return (
     <section className="testimonials u-section" id="resenas">
       <div className="testimonials__inner u-container">
-        <SectionHeading
-          eyebrow="Reseñas"
-          title="Claridad que se siente desde la primera señal."
-          description="Experiencias de usuarios que priorizan información, velocidad y control."
-        />
-        <div className="testimonials__grid">
-          {testimonials.map((testimonial) => (
-            <TestimonialCard key={testimonial.name} {...testimonial} />
-          ))}
+        <div className="testimonials__layout">
+          <div className="testimonials__intro">
+            <SectionHeading
+              eyebrow="Reseñas"
+              title="Claridad en cada señal."
+              description="Experiencias de usuarios que priorizan información, velocidad y control."
+              size="compact"
+            />
+          </div>
+          <TestimonialsCarousel testimonials={testimonials} />
         </div>
       </div>
     </section>

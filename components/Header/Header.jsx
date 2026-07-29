@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { shouldSkipImageOptimization } from "../../lib/image.js";
 import { Button } from "../Button/Button.jsx";
 
 const navItems = [
@@ -22,6 +23,7 @@ export function Header() {
               width={240}
               height={240}
               priority
+              unoptimized={shouldSkipImageOptimization}
             />
           </span>
           <span className="header__wordmark">

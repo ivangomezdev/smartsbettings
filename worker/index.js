@@ -10,6 +10,16 @@ const worker = {
     const url = new URL(request.url);
 
     if (url.pathname === "/_vinext/image") {
+      if (!env.ASSETS || !env.IMAGES) {
+        const imageSource = url.searchParams.get("url");
+
+        if (!imageSource || !imageSource.startsWith("/")) {
+          return new Response("Invalid image source", { status: 400 });
+        }
+
+        return Response.redirect(new URL(imageSource, request.url), 307);
+      }
+
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
 
       return handleImageOptimization(

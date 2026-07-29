@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { shouldSkipImageOptimization } from "../../lib/image.js";
 
 export function Footer() {
   return (
@@ -12,6 +13,7 @@ export function Footer() {
               alt="SmartBetting"
               width={1254}
               height={1254}
+              unoptimized={shouldSkipImageOptimization}
             />
           </a>
           <p className="footer__tagline">

@@ -17,6 +17,13 @@
   --color-border-strong: rgba(255, 255, 255, 0.15);
   --color-border-primary: rgba(109, 255, 0, 0.36);
   --color-grid: rgba(109, 255, 0, 0.045);
+  --color-glass-control: rgba(18, 22, 18, 0.62);
+  --color-glass-control-hover: rgba(28, 34, 27, 0.84);
+  --color-glass-border: rgba(255, 255, 255, 0.12);
+  --color-glass-border-hover: rgba(255, 255, 255, 0.22);
+  --color-glass-divider: rgba(255, 255, 255, 0.09);
+  --color-glass-quote: rgba(255, 255, 255, 0.18);
+  --color-glass-brand: rgba(109, 255, 0, 0.28);
 
   --gradient-primary: linear-gradient(135deg, var(--color-primary-bright), var(--color-primary));
   --gradient-panel: linear-gradient(145deg, rgba(15, 23, 14, 0.96), rgba(5, 9, 5, 0.9));
@@ -24,6 +31,10 @@
   --gradient-section-reverse: linear-gradient(0deg, rgba(109, 255, 0, 0.025), transparent 55%);
   --gradient-card-featured: linear-gradient(145deg, rgba(109, 255, 0, 0.09), var(--color-surface) 48%);
   --gradient-line: linear-gradient(90deg, transparent, var(--color-border-primary), transparent);
+  --gradient-testimonials: radial-gradient(circle at 85% 22%, rgba(109, 255, 0, 0.06), transparent 26%), linear-gradient(180deg, #050805, #030503);
+  --gradient-testimonial-card: linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025) 46%, rgba(7, 10, 7, 0.64));
+  --gradient-glass-sheen: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  --gradient-avatar: linear-gradient(145deg, rgba(109, 255, 0, 0.16), rgba(255, 255, 255, 0.04));
 
   --spacing-2xs: 0.25rem;
   --spacing-xs: 0.375rem;
@@ -41,6 +52,7 @@
   --radius-xl: 1.5rem;
   --radius-pill: 9999px;
   --radius-circle: 50%;
+  --radius-testimonial: 1.75rem;
 
   --font-size-2xs: 0.6875rem;
   --font-size-xs: 0.75rem;
@@ -50,10 +62,13 @@
   --font-size-xl: clamp(1.25rem, 3vw, 1.5rem);
   --font-size-2xl: clamp(1.6rem, 4vw, 2rem);
   --font-size-section: clamp(2.4rem, 7vw, 4.8rem);
+  --font-size-section-compact: clamp(2.15rem, 4vw, 3.35rem);
   --font-size-hero: clamp(3.25rem, 10vw, 7.5rem);
   --font-size-price: clamp(2.8rem, 7vw, 4.5rem);
   --font-size-button: 0.875rem;
   --font-size-wordmark: 1.25rem;
+  --font-size-testimonial: clamp(1.05rem, 1.6vw, 1.25rem);
+  --font-size-quote-mark: 3.25rem;
 
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
@@ -63,11 +78,15 @@
   --line-height-snug: 1.25;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.7;
+  --line-height-testimonial: 1.55;
 
   --letter-spacing-hero: -0.055em;
   --letter-spacing-tight: -0.035em;
+  --letter-spacing-compact: -0.025em;
   --letter-spacing-wide: 0.08em;
   --letter-spacing-label: 0.18em;
+  --letter-spacing-stars: 0.16em;
+  --letter-spacing-testimonial: -0.015em;
 
   --shadow-dot: 0 0 0.75rem var(--color-primary);
   --shadow-primary: 0 0.75rem 2.5rem rgba(109, 255, 0, 0.17);
@@ -75,6 +94,9 @@
   --shadow-primary-strong: 0 1rem 3rem rgba(109, 255, 0, 0.28);
   --shadow-panel: 0 2rem 7rem rgba(0, 0, 0, 0.52);
   --shadow-text-primary: 0 0 2.5rem rgba(109, 255, 0, 0.3);
+  --shadow-glass: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1.5rem 4rem rgba(0, 0, 0, 0.26);
+  --shadow-glass-hover: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 2rem 5rem rgba(0, 0, 0, 0.38);
+  --shadow-glass-glow: 0 0 5rem 2rem rgba(109, 255, 0, 0.38);
 
   --content-max: 76rem;
   --content-narrow: 46rem;
@@ -83,6 +105,9 @@
   --content-stats: 31rem;
   --content-pricing: 61rem;
   --content-faq: 42rem;
+  --content-testimonial-intro: 25rem;
+  --content-testimonial-description: 23rem;
+  --content-testimonial-carousel: 36rem;
   --terminal-width: 35rem;
 
   --header-height-mobile: 4.5rem;
@@ -111,6 +136,23 @@
   --footer-logo-offset: -6.75rem;
   --cta-orb-size: 24rem;
   --cta-orb-offset: -10rem;
+  --carousel-card-width: 100%;
+  --carousel-control-size: 3rem;
+  --carousel-dot-size: 0.4rem;
+  --carousel-dot-active-width: 1.75rem;
+  --testimonials-orb-size: 22rem;
+  --testimonials-orb-left: -8rem;
+  --testimonials-orb-top: 8rem;
+  --verified-dot-size: 0.3rem;
+  --quote-mark-height: 1.5rem;
+  --glass-sheen-height: 9rem;
+  --glass-sheen-width: 26rem;
+  --glass-sheen-left: -8rem;
+  --glass-sheen-top: -5rem;
+  --glass-glow-size: 2rem;
+  --glass-glow-offset: -1rem;
+  --testimonial-card-height-mobile: 19rem;
+  --testimonial-card-height: 17rem;
 
   --position-zero: 0;
   --viewport-height: 100svh;
@@ -122,11 +164,19 @@
   --offset-slide: 0.25rem;
   --angle-logo: -5deg;
   --angle-open: 45deg;
+  --angle-glass-sheen: -12deg;
   --scale-pulse: 1.35;
   --ticker-distance: -50%;
   --opacity-logo: 0.32;
   --opacity-pulse: 0.4;
+  --opacity-disabled: 0.3;
+  --opacity-ambient: 0.42;
+  --opacity-glass-sheen: 0.42;
+  --opacity-glass-glow: 0.52;
   --blur-panel: 1rem;
+  --blur-glass: 1.5rem;
+  --blur-ambient: 5rem;
+  --saturation-glass: 140%;
   --duration-fast: 180ms;
   --duration-pulse: 2s;
   --duration-ticker: 28s;

@@ -23,9 +23,20 @@
   letter-spacing: var(--letter-spacing-tight);
 }
 
+.section-heading__title--compact {
+  font-size: var(--font-size-section-compact);
+  letter-spacing: var(--letter-spacing-compact);
+}
+
 .section-heading__description {
   color: var(--color-text-muted);
   font-size: var(--font-size-lg);
   line-height: var(--line-height-relaxed);
   margin-top: var(--spacing-lg);
+}
+
+.section-heading__description--compact {
+  font-size: var(--font-size-base);
+  margin-top: var(--spacing-md);
+  max-width: var(--content-testimonial-description);
 }

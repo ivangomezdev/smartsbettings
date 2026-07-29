@@ -13,6 +13,8 @@
   background-color: var(--color-surface-soft);
   border: var(--border-thin) solid var(--color-border);
   border-radius: var(--radius-lg);
+  isolation: isolate;
+  overflow: hidden;
   padding: var(--spacing-xl);
   position: relative;
   transition:
@@ -20,9 +22,55 @@
     transform var(--duration-fast) var(--ease-standard);
 }
 
+.how-it-works__step:nth-child(1) {
+  --step-background: url("/how-it-works-signal.webp");
+}
+
+.how-it-works__step:nth-child(2) {
+  --step-background: url("/how-it-works-context.webp");
+}
+
+.how-it-works__step:nth-child(3) {
+  --step-background: url("/how-it-works-control.webp");
+}
+
+.how-it-works__step::before,
+.how-it-works__step::after {
+  content: "";
+  inset: var(--position-zero);
+  pointer-events: none;
+  position: absolute;
+  z-index: var(--position-zero);
+}
+
+.how-it-works__step::before {
+  background-image: var(--step-background);
+  background-position: right center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: saturate(0.72) contrast(1.08);
+  opacity: 0.16;
+  transition: opacity var(--duration-fast) var(--ease-standard);
+}
+
+.how-it-works__step::after {
+  background:
+    linear-gradient(90deg, rgba(4, 7, 4, 0.88), rgba(4, 7, 4, 0.48)),
+    linear-gradient(180deg, transparent 45%, rgba(4, 7, 4, 0.62));
+}
+
+.how-it-works__step > * {
+  position: relative;
+  z-index: var(--z-content);
+}
+
 .how-it-works__step:hover {
   border-color: var(--color-border-primary);
   transform: translateY(var(--offset-lift));
+}
+
+.how-it-works__step:hover::before {
+  opacity: 0.21;
 }
 
 .how-it-works__number {
