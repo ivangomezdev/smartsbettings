@@ -1,0 +1,29 @@
+.pricing {
+  background:
+    radial-gradient(circle at 50% 25%, var(--color-primary-halo), transparent 28%),
+    var(--color-background);
+  border-bottom: var(--border-thin) solid var(--color-border);
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.pricing__grid {
+  display: grid;
+  gap: var(--spacing-lg);
+  margin: var(--spacing-3xl) auto var(--position-zero);
+  max-width: var(--content-pricing);
+}
+
+.pricing__note {
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+  margin: var(--spacing-xl) auto var(--position-zero);
+  max-width: var(--content-pricing);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .pricing__grid {
+    grid-template-columns: repeat(2, minmax(var(--position-zero), 1fr));
+  }
+}

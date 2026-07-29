@@ -1,0 +1,31 @@
+.section-heading {
+  max-width: var(--content-narrow);
+}
+
+.section-heading--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section-heading__eyebrow {
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-label);
+  margin-bottom: var(--spacing-md);
+  text-transform: uppercase;
+}
+
+.section-heading__title {
+  color: var(--color-text);
+  font-size: var(--font-size-section);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.section-heading__description {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  margin-top: var(--spacing-lg);
+}

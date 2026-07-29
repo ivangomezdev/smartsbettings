@@ -1,0 +1,94 @@
+.pricing-card {
+  background-color: var(--color-surface);
+  border: var(--border-thin) solid var(--color-border-strong);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: var(--spacing-xl);
+  position: relative;
+}
+
+.pricing-card--featured {
+  background: var(--gradient-card-featured);
+  border-color: var(--color-border-primary);
+  box-shadow: var(--shadow-primary-soft);
+}
+
+.pricing-card__badge {
+  background-color: var(--color-primary);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-wide);
+  padding: var(--spacing-xs) var(--spacing-md);
+  position: absolute;
+  right: var(--spacing-xl);
+  text-transform: uppercase;
+  top: var(--spacing-xl);
+}
+
+.pricing-card__eyebrow {
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+}
+
+.pricing-card__name {
+  color: var(--color-text);
+  font-size: var(--font-size-2xl);
+  margin-top: var(--spacing-sm);
+}
+
+.pricing-card__price {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xl);
+}
+
+.pricing-card__amount {
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-price);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.pricing-card__suffix {
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-sm);
+}
+
+.pricing-card__description {
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+  margin-top: var(--spacing-md);
+}
+
+.pricing-card__features {
+  border-top: var(--border-thin) solid var(--color-border);
+  display: grid;
+  flex: 1;
+  gap: var(--spacing-md);
+  margin: var(--spacing-xl) var(--position-zero);
+  padding-top: var(--spacing-xl);
+}
+
+.pricing-card__feature {
+  color: var(--color-text-muted);
+  display: flex;
+  gap: var(--spacing-sm);
+  line-height: var(--line-height-normal);
+}
+
+.pricing-card__check {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+}

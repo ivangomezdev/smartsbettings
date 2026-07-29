@@ -1,0 +1,102 @@
+.header {
+  background-color: var(--color-header);
+  border-bottom: var(--border-thin) solid var(--color-border);
+  left: var(--position-zero);
+  position: sticky;
+  right: var(--position-zero);
+  top: var(--position-zero);
+  z-index: var(--z-header);
+}
+
+.header__inner {
+  align-items: center;
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: 1fr auto;
+  min-height: var(--header-height-mobile);
+}
+
+.header__brand {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--spacing-sm);
+  min-width: var(--position-zero);
+  width: fit-content;
+}
+
+.header__logo-frame {
+  border: var(--border-thin) solid var(--color-border-strong);
+  border-radius: var(--radius-circle);
+  display: block;
+  height: var(--logo-size);
+  overflow: hidden;
+  position: relative;
+  width: var(--logo-size);
+}
+
+.header__logo {
+  height: var(--logo-crop-size);
+  left: var(--logo-crop-offset-x);
+  max-width: none;
+  position: absolute;
+  top: var(--logo-crop-offset-y);
+  width: var(--logo-crop-size);
+}
+
+.header__wordmark {
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-wordmark);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.header__wordmark-accent {
+  color: var(--color-primary);
+}
+
+.header__nav {
+  display: none;
+}
+
+.header__link {
+  color: var(--color-text-muted);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.header__link:hover {
+  color: var(--color-primary);
+}
+
+.header__link:focus-visible {
+  color: var(--color-primary);
+  outline: var(--outline-width) solid var(--color-primary);
+  outline-offset: var(--outline-offset);
+}
+
+.header__action {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .header__inner {
+    grid-template-columns: auto 1fr auto;
+    min-height: var(--header-height);
+  }
+
+  .header__nav {
+    align-items: center;
+    display: flex;
+    gap: var(--spacing-lg);
+    justify-content: center;
+  }
+
+  .header__action {
+    display: block;
+  }
+}

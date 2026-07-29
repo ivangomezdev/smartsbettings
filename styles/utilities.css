@@ -1,0 +1,16 @@
+.u-container {
+  margin-inline: auto;
+  max-width: var(--content-max);
+  padding-inline: var(--spacing-lg);
+  width: 100%;
+}
+
+.u-section {
+  padding-block: var(--spacing-4xl);
+}
+
+@media (min-width: 1200px) {
+  .u-container {
+    padding-inline: var(--spacing-xl);
+  }
+}

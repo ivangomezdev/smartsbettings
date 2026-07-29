@@ -1,0 +1,15 @@
+.testimonials {
+  background: var(--gradient-section-reverse);
+}
+
+.testimonials__grid {
+  display: grid;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-3xl);
+}
+
+@media (min-width: 768px) {
+  .testimonials__grid {
+    grid-template-columns: repeat(3, minmax(var(--position-zero), 1fr));
+  }
+}

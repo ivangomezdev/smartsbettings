@@ -1,0 +1,186 @@
+.platform {
+  background: var(--gradient-section);
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.platform__layout {
+  display: grid;
+  gap: var(--spacing-3xl);
+  margin-top: var(--spacing-3xl);
+}
+
+.platform__dashboard {
+  background-color: var(--color-surface);
+  border: var(--border-thin) solid var(--color-border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-panel);
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  min-height: var(--dashboard-height);
+  overflow: hidden;
+}
+
+.platform__sidebar {
+  align-items: center;
+  background-color: var(--color-surface-deep);
+  border-right: var(--border-thin) solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+}
+
+.platform__mini-logo {
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-lg);
+}
+
+.platform__side-dot {
+  background-color: var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  height: var(--side-icon-height);
+  width: var(--side-icon-width);
+}
+
+.platform__side-dot--active {
+  background-color: var(--color-primary);
+  box-shadow: var(--shadow-dot);
+}
+
+.platform__screen {
+  min-width: var(--position-zero);
+  padding: var(--spacing-lg);
+}
+
+.platform__topbar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.platform__screen-label {
+  color: var(--color-text-subtle);
+  display: block;
+  font-size: var(--font-size-2xs);
+  letter-spacing: var(--letter-spacing-label);
+  margin-bottom: var(--spacing-xs);
+  text-transform: uppercase;
+}
+
+.platform__screen-title {
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-2xl);
+}
+
+.platform__online {
+  color: var(--color-primary);
+  font-size: var(--font-size-xs);
+}
+
+.platform__metrics {
+  display: grid;
+  gap: var(--spacing-sm);
+  grid-template-columns: repeat(3, minmax(var(--position-zero), 1fr));
+  margin-top: var(--spacing-xl);
+}
+
+.platform__metric {
+  background-color: var(--color-surface-soft);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+}
+
+.platform__metric-label {
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-2xs);
+}
+
+.platform__metric-value {
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xl);
+}
+
+.platform__table {
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-top: var(--spacing-md);
+  overflow: hidden;
+}
+
+.platform__table-head,
+.platform__table-row {
+  align-items: center;
+  display: grid;
+  gap: var(--spacing-sm);
+  grid-template-columns: 1.4fr 1fr 0.6fr;
+  padding: var(--spacing-md);
+}
+
+.platform__table-head {
+  background-color: var(--color-surface-deep);
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-2xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.platform__table-row {
+  border-top: var(--border-thin) solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.platform__table-value {
+  color: var(--color-primary);
+  text-align: right;
+}
+
+.platform__benefits {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.platform__benefit {
+  border-top: var(--border-thin) solid var(--color-border-strong);
+  display: grid;
+  gap: var(--spacing-lg);
+  grid-template-columns: auto 1fr;
+  padding-top: var(--spacing-lg);
+}
+
+.platform__benefit-number {
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.platform__benefit-title {
+  color: var(--color-text);
+  font-size: var(--font-size-xl);
+}
+
+.platform__benefit-copy {
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+  margin-top: var(--spacing-sm);
+}
+
+@media (min-width: 992px) {
+  .platform__layout {
+    align-items: center;
+    grid-template-columns: minmax(var(--position-zero), 1.25fr) minmax(var(--position-zero), 0.75fr);
+  }
+
+  .platform__screen {
+    padding: var(--spacing-xl);
+  }
+}

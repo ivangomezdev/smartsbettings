@@ -1,0 +1,17 @@
+@import "./reset.css";
+@import "./variables.css";
+@import "./typography.css";
+@import "./utilities.css";
+@import "../components/Button/Button.css";
+@import "../components/SectionHeading/SectionHeading.css";
+@import "../components/Header/Header.css";
+@import "../components/Hero/Hero.css";
+@import "../components/Platform/Platform.css";
+@import "../components/HowItWorks/HowItWorks.css";
+@import "../components/PricingCard/PricingCard.css";
+@import "../components/Pricing/Pricing.css";
+@import "../components/TestimonialCard/TestimonialCard.css";
+@import "../components/Testimonials/Testimonials.css";
+@import "../components/FaqList/FaqList.css";
+@import "../components/FinalCta/FinalCta.css";
+@import "../components/Footer/Footer.css";
