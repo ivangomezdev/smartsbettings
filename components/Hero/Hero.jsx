@@ -31,6 +31,12 @@ export function Hero() {
     <section className="hero" id="inicio">
       <div className="hero__media" aria-hidden="true">
         <HeroBackgroundVideo />
+        <div className="hero__background-watermark" />
+        <div className="hero__crypto-layer">
+          <span>₿</span>
+          <span>Ξ</span>
+          <span>₮</span>
+        </div>
       </div>
       <div className="hero__ambient" aria-hidden="true" />
       <div className="hero__grid u-container">

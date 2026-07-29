@@ -46,7 +46,7 @@ export function HeroBackgroundVideo() {
       tabIndex={-1}
       aria-hidden="true"
     >
-      <source src="/hero-sports-crypto.mp4" type="video/mp4" />
+      <source src="/hero-sports-crypto-v2.mp4" type="video/mp4" />
     </video>
   );
 }

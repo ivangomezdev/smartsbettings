@@ -22,15 +22,74 @@
   content: "";
   inset: var(--position-zero);
   position: absolute;
+  z-index: 3;
 }
 
 .hero__background-video {
+  backface-visibility: hidden;
   filter: saturate(0.82) contrast(1.08);
   height: 100%;
+  inset: var(--position-zero);
   object-fit: cover;
   object-position: center;
-  opacity: 0.48;
+  opacity: 0.56;
+  position: absolute;
+  transform: translateZ(0);
   width: 100%;
+}
+
+.hero__background-watermark {
+  animation: hero-watermark-drift 9s ease-in-out infinite alternate;
+  aspect-ratio: 1;
+  background-image: url("/smartbetting-logo.jpeg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  filter: saturate(0.88) brightness(0.76);
+  mix-blend-mode: screen;
+  opacity: 0.2;
+  position: absolute;
+  right: clamp(-8rem, -6vw, -3rem);
+  top: 50%;
+  transform: translateY(-50%) rotate(-4deg);
+  width: clamp(22rem, 42vw, 38rem);
+  z-index: 1;
+}
+
+.hero__crypto-layer {
+  align-items: center;
+  animation: hero-crypto-drift 7s ease-in-out infinite alternate;
+  display: flex;
+  gap: var(--spacing-sm);
+  opacity: 0.48;
+  position: absolute;
+  right: clamp(3rem, 22vw, 22rem);
+  top: 18%;
+  z-index: 2;
+}
+
+.hero__crypto-layer span {
+  align-items: center;
+  backdrop-filter: blur(var(--blur-panel));
+  background-color: var(--color-glass-control);
+  border: var(--border-thin) solid var(--color-border-primary);
+  border-radius: var(--radius-circle);
+  box-shadow: var(--shadow-primary-soft);
+  color: var(--color-primary);
+  display: flex;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xl);
+  height: clamp(2.75rem, 5vw, 4.25rem);
+  justify-content: center;
+  width: clamp(2.75rem, 5vw, 4.25rem);
+}
+
+.hero__crypto-layer span:nth-child(2) {
+  transform: translateY(var(--spacing-lg));
+}
+
+.hero__crypto-layer span:nth-child(3) {
+  transform: translateY(calc(var(--spacing-sm) * -1));
 }
 
 .hero__ambient {
@@ -330,6 +389,19 @@
   }
 }
 
+@keyframes hero-watermark-drift {
+  to {
+    opacity: 0.27;
+    transform: translateY(calc(-50% - var(--spacing-sm))) rotate(-2deg) scale(1.025);
+  }
+}
+
+@keyframes hero-crypto-drift {
+  to {
+    transform: translate3d(var(--spacing-lg), var(--spacing-sm), 0);
+  }
+}
+
 @media (min-width: 992px) {
   .hero {
     min-height: calc(var(--viewport-height) - var(--header-height));
@@ -343,6 +415,11 @@
 @media (prefers-reduced-motion: reduce) {
   .hero__background-video {
     display: none;
+  }
+
+  .hero__background-watermark,
+  .hero__crypto-layer {
+    animation: none;
   }
 
   .hero__status-dot,
