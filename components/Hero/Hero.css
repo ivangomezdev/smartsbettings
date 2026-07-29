@@ -6,13 +6,12 @@
 }
 
 .hero__media {
-  background-image: url("/hero-sports-crypto-poster.webp");
-  background-position: center;
-  background-size: cover;
   inset: var(--position-zero);
+  isolation: isolate;
   overflow: hidden;
   pointer-events: none;
   position: absolute;
+  z-index: var(--position-zero);
 }
 
 .hero__media::after {
@@ -201,24 +200,6 @@
 .hero__visual {
   min-height: var(--hero-visual-height);
   position: relative;
-}
-
-.hero__logo-halo {
-  border-radius: var(--radius-circle);
-  height: var(--hero-logo-size);
-  opacity: var(--opacity-logo);
-  overflow: hidden;
-  position: absolute;
-  right: var(--hero-logo-right);
-  top: var(--hero-logo-top);
-  transform: rotate(var(--angle-logo));
-  width: var(--hero-logo-size);
-}
-
-.hero__brand-image {
-  height: 100%;
-  object-fit: cover;
-  width: 100%;
 }
 
 .hero__terminal {
@@ -413,6 +394,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero__media {
+    background-image: url("/hero-sports-crypto-poster.webp");
+    background-position: center;
+    background-size: cover;
+  }
+
   .hero__background-video {
     display: none;
   }

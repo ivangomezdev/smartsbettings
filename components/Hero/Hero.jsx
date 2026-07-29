@@ -1,5 +1,3 @@
-import Image from "next/image";
-import { shouldSkipImageOptimization } from "../../lib/image.js";
 import { Button } from "../Button/Button.jsx";
 import { HeroBackgroundVideo } from "./HeroBackgroundVideo.jsx";
 
@@ -71,17 +69,6 @@ export function Hero() {
         </div>
 
         <div className="hero__visual" aria-label="Vista previa de oportunidades">
-          <div className="hero__logo-halo" aria-hidden="true">
-            <Image
-              className="hero__brand-image"
-              src="/smartbetting-logo.jpeg"
-              alt=""
-              width={1254}
-              height={1254}
-              priority
-              unoptimized={shouldSkipImageOptimization}
-            />
-          </div>
           <div className="hero__terminal">
             <div className="hero__terminal-bar">
               <div>
