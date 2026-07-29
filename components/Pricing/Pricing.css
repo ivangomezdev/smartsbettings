@@ -1,9 +1,39 @@
 .pricing {
-  background:
-    radial-gradient(circle at 50% 25%, var(--color-primary-halo), transparent 28%),
-    var(--color-background);
+  background: var(--color-background);
   border-bottom: var(--border-thin) solid var(--color-border);
   border-top: var(--border-thin) solid var(--color-border);
+  isolation: isolate;
+  overflow: hidden;
+  position: relative;
+}
+
+.pricing::before,
+.pricing::after {
+  content: "";
+  inset: var(--position-zero);
+  pointer-events: none;
+  position: absolute;
+  z-index: var(--position-zero);
+}
+
+.pricing::before {
+  background-image: url("/pricing-sports-crypto.webp");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: saturate(0.78) contrast(1.08);
+  opacity: 0.16;
+}
+
+.pricing::after {
+  background:
+    radial-gradient(circle at 50% 25%, var(--color-primary-halo), transparent 28%),
+    linear-gradient(180deg, rgba(4, 7, 4, 0.34), rgba(4, 7, 4, 0.76));
+}
+
+.pricing__inner {
+  position: relative;
+  z-index: var(--z-content);
 }
 
 .pricing__grid {

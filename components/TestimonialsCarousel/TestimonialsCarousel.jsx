@@ -24,11 +24,21 @@ export function TestimonialsCarousel({ testimonials }) {
       const nextIndex = (activeIndexRef.current + 1) % testimonials.length;
       const nextSlide = carousel.children[nextIndex];
 
-      nextSlide?.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "center",
-      });
+      if (nextSlide) {
+        const carouselBounds = carousel.getBoundingClientRect();
+        const slideBounds = nextSlide.getBoundingClientRect();
+        const nextScrollLeft =
+          carousel.scrollLeft +
+          slideBounds.left -
+          carouselBounds.left -
+          (carousel.clientWidth - slideBounds.width) / 2;
+
+        carousel.scrollTo({
+          behavior: "smooth",
+          left: nextScrollLeft,
+        });
+      }
+
       activeIndexRef.current = nextIndex;
     }, 6000);
 
