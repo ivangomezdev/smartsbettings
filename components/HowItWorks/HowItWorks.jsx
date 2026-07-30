@@ -35,7 +35,11 @@ export function HowItWorks() {
             <article className="how-it-works__step" key={step.number}>
               <span className="how-it-works__number">{step.number}</span>
               <h3 className="how-it-works__title">{step.title}</h3>
-              <p className="how-it-works__copy">{step.description}</p>
+              <p className="how-it-works__copy">
+                <span className="how-it-works__copy-highlight">
+                  {step.description}
+                </span>
+              </p>
             </article>
           ))}
         </div>

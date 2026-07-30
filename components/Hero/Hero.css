@@ -219,8 +219,8 @@
 .hero__terminal {
   backdrop-filter: blur(var(--blur-panel));
   background: var(--gradient-panel);
-  border: var(--border-thin) solid var(--color-gold-border);
-  border-radius: var(--radius-xl);
+  border: var(--border-thin) solid var(--color-border-strong);
+  border-radius: var(--position-zero);
   box-shadow: var(--shadow-panel);
   overflow: hidden;
   position: absolute;

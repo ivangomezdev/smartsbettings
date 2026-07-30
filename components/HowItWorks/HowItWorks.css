@@ -90,14 +90,16 @@
 }
 
 .how-it-works__copy {
-  background-color: rgba(0, 0, 0, 0.82);
-  border-radius: var(--radius-md);
   color: var(--color-text-muted);
-  line-height: var(--line-height-relaxed);
+  line-height: 1.85;
   margin-top: var(--spacing-md);
-  max-width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
-  width: fit-content;
+}
+
+.how-it-works__copy-highlight {
+  -webkit-box-decoration-break: clone;
+  background-color: rgba(0, 0, 0, 0.86);
+  box-decoration-break: clone;
+  padding: 0.18em 0.38em;
 }
 
 @media (min-width: 768px) {
