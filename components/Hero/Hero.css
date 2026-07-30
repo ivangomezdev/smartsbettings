@@ -228,10 +228,6 @@
   width: min(100%, var(--terminal-width));
 }
 
-.hero__chips-video-frame {
-  display: none;
-}
-
 .hero__terminal::before {
   background: linear-gradient(90deg, transparent, var(--color-gold), var(--color-primary), transparent);
   content: "";
@@ -469,14 +465,13 @@
   .hero__background-video {
     object-fit: cover;
     object-position: center top;
-    opacity: var(--opacity-hero-video-mobile);
   }
 
   .hero__video-frame::after {
     background:
       radial-gradient(circle at 82% 18%, var(--color-gold-halo), transparent 30%),
-      linear-gradient(90deg, rgba(4, 7, 4, 0.72), rgba(4, 7, 4, 0.24)),
-      linear-gradient(180deg, rgba(4, 7, 4, 0.08), rgba(4, 7, 4, 0.46) 58%, var(--color-background) 100%);
+      linear-gradient(90deg, rgba(4, 7, 4, 0.9), rgba(4, 7, 4, 0.5)),
+      linear-gradient(180deg, rgba(4, 7, 4, 0.28), rgba(4, 7, 4, 0.62) 58%, var(--color-background) 100%);
   }
 
   .hero__video-play {
@@ -493,9 +488,17 @@
     max-width: 18rem;
   }
 
+  .hero__private-label,
   .hero__title,
-  .hero__lead {
+  .hero__lead,
+  .hero__stat-value,
+  .hero__stat-label {
     text-shadow: var(--shadow-text-hero);
+  }
+
+  .hero__lead,
+  .hero__stat-label {
+    color: var(--color-text-muted);
   }
 }
 
@@ -517,27 +520,6 @@
     width: 100%;
   }
 
-  .hero__chips-video-frame {
-    aspect-ratio: 16 / 9;
-    display: block;
-    left: calc(0rem - var(--spacing-lg));
-    margin-top: var(--position-zero);
-    overflow: hidden;
-    position: relative;
-    width: calc(100% + var(--spacing-lg) + var(--spacing-lg));
-  }
-
-  .hero__chips-video {
-    display: block;
-    height: 100%;
-    mix-blend-mode: screen;
-    object-fit: cover;
-    width: 100%;
-  }
-
-  .hero__ticker {
-    margin-top: var(--position-zero);
-  }
 }
 
 @media (min-width: 992px) {

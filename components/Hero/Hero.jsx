@@ -8,7 +8,6 @@ import {
 } from "react-icons/md";
 import { WinnersCarousel } from "../WinnersCarousel/WinnersCarousel.jsx";
 import { HeroBackgroundVideo } from "./HeroBackgroundVideo.jsx";
-import { MobileChipsVideo } from "./MobileChipsVideo.jsx";
 
 const heroStats = [
   { value: "24/7", label: "Monitoreo" },
@@ -177,7 +176,6 @@ export function Hero() {
             </div>
             <WinnersCarousel winners={topWinners} />
           </div>
-          <MobileChipsVideo />
         </div>
       </div>
       <div className="hero__ticker" aria-label="Deportes disponibles">
