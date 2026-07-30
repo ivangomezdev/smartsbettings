@@ -34,32 +34,12 @@ const userGains = [
   },
 ];
 
-const cryptoCoins = [
-  { symbol: "₿", label: "Bitcoin", tone: "bitcoin" },
-  { symbol: "Ξ", label: "Ethereum", tone: "ethereum" },
-  { symbol: "₮", label: "Tether", tone: "tether" },
-  { symbol: "◎", label: "Solana", tone: "solana" },
-  { symbol: "BNB", label: "BNB", tone: "bnb" },
-  { symbol: "$", label: "USD Coin", tone: "usdc" },
-  { symbol: "XRP", label: "XRP", tone: "xrp" },
-];
-
 export function Hero() {
   return (
     <section className="hero" id="inicio">
       <HeroBackgroundVideo />
       <div className="hero__media" aria-hidden="true">
         <div className="hero__background-watermark" />
-        <div className="hero__crypto-layer">
-          {cryptoCoins.map((coin) => (
-            <span
-              className={`hero__crypto-coin hero__crypto-coin--${coin.tone}`}
-              key={coin.label}
-            >
-              <span className="hero__crypto-symbol">{coin.symbol}</span>
-            </span>
-          ))}
-        </div>
       </div>
       <div className="hero__ambient" aria-hidden="true" />
       <div className="hero__grid u-container">

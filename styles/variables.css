@@ -136,7 +136,7 @@
   --logo-crop-offset-x: -0.125rem;
   --logo-crop-offset-y: -1rem;
   --hero-visual-height: 36rem;
-  --hero-video-mobile-height: 56.25vw;
+  --hero-video-mobile-height: min(177.78vw, calc(var(--viewport-height) - var(--header-height-mobile)));
   --hero-logo-size: 26rem;
   --hero-logo-right: -6rem;
   --hero-logo-top: -6rem;
