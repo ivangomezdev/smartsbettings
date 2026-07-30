@@ -145,8 +145,7 @@
   text-transform: uppercase;
 }
 
-.hero__status-dot,
-.hero__live-dot {
+.hero__status-dot {
   animation: hero-pulse var(--duration-pulse) infinite;
   background-color: var(--color-primary);
   border-radius: var(--radius-circle);
@@ -264,16 +263,17 @@
 
 .hero__live {
   align-items: center;
-  background-color: var(--color-primary-soft);
-  border-radius: var(--radius-pill);
-  color: var(--color-primary);
   display: flex;
-  font-family: var(--font-heading);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
-  gap: var(--spacing-xs);
-  letter-spacing: var(--letter-spacing-wide);
-  padding: var(--spacing-xs) var(--spacing-sm);
+  height: var(--hero-usdt-logo-size);
+  justify-content: center;
+  width: var(--hero-usdt-logo-size);
+}
+
+.hero__live-logo {
+  filter: var(--filter-usdt-glow);
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
 }
 
 .hero__ticker {
@@ -393,7 +393,6 @@
   }
 
   .hero__status-dot,
-  .hero__live-dot,
   .hero__ticker-track {
     animation: none;
   }

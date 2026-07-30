@@ -11,6 +11,11 @@
   --color-primary-bright: #b5ff5a;
   --color-primary-soft: rgba(109, 255, 0, 0.09);
   --color-primary-halo: rgba(109, 255, 0, 0.14);
+  --color-neon-cyan: #00f5ff;
+  --color-neon-magenta: #ff3df2;
+  --color-neon-orange: #ff8a00;
+  --color-neon-violet: #a45cff;
+  --color-neon-blue: #3d7eff;
   --color-gold: #d8b96c;
   --color-gold-bright: #fff1b8;
   --color-gold-soft: rgba(216, 185, 108, 0.12);
@@ -111,6 +116,9 @@
   --shadow-glass-hover: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 2rem 5rem rgba(0, 0, 0, 0.38);
   --shadow-glass-glow: 0 0 5rem 2rem rgba(109, 255, 0, 0.38);
   --shadow-avatar-ring: 0 0 1rem rgba(109, 255, 0, 0.22);
+  --shadow-winner-neon: 0 0 0.45rem var(--winner-neon), 0 0 1rem var(--winner-neon);
+  --shadow-winner-number: 0 1px 0.2rem var(--color-black), 0 0 0.45rem var(--color-black);
+  --filter-usdt-glow: drop-shadow(0 0 0.8rem rgba(0, 147, 147, 0.44));
 
   --content-max: 76rem;
   --content-narrow: 46rem;
@@ -134,7 +142,8 @@
   --video-play-icon-border: 0.35rem;
   --video-play-icon-width: 0.55rem;
   --winner-notification-height: 4.35rem;
-  --winner-rank-size: 2.5rem;
+  --winner-rank-size: 3rem;
+  --hero-usdt-logo-size: 4.5rem;
   --logo-frame-height: 2.25rem;
   --logo-frame-width: 4.75rem;
   --logo-crop-size: 5rem;

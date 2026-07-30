@@ -58,8 +58,18 @@ export function WinnersCarousel({ winners }) {
               className={`winners-carousel__notification winners-carousel__notification--${slot}`}
               key={winner.user}
             >
-              <span className="winners-carousel__rank" aria-label={`Posición ${winner.rank}`}>
-                #{winner.rank}
+              <span
+                className={`winners-carousel__rank winners-carousel__rank--${winner.neon}`}
+                aria-label={`Posición ${winner.rank}`}
+              >
+                <img
+                  className="winners-carousel__avatar"
+                  src={winner.avatar}
+                  alt=""
+                />
+                <span className="winners-carousel__rank-number">
+                  #{winner.rank}
+                </span>
               </span>
               <div className="winners-carousel__identity">
                 <h2 className="winners-carousel__user">{winner.user}</h2>

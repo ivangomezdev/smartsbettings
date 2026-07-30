@@ -43,6 +43,7 @@
 }
 
 .winners-carousel__notification--second {
+  border-color: transparent;
   transform: translateY(calc(100% + var(--spacing-sm)));
 }
 
@@ -61,18 +62,60 @@
 
 .winners-carousel__rank {
   align-items: center;
-  background: var(--gradient-coin);
-  border: var(--border-thin) solid var(--color-gold-border);
+  background-color: var(--color-black);
+  border: var(--border-thick) solid var(--winner-neon);
   border-radius: var(--radius-circle);
-  box-shadow: var(--shadow-gold);
-  color: var(--color-gold-bright);
+  box-shadow: var(--shadow-winner-neon);
+  color: var(--color-white);
   display: flex;
   font-family: var(--font-heading);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   height: var(--winner-rank-size);
   justify-content: center;
+  overflow: hidden;
+  position: relative;
   width: var(--winner-rank-size);
+}
+
+.winners-carousel__rank--cyan {
+  --winner-neon: var(--color-neon-cyan);
+}
+
+.winners-carousel__rank--magenta {
+  --winner-neon: var(--color-neon-magenta);
+}
+
+.winners-carousel__rank--lime {
+  --winner-neon: var(--color-primary);
+}
+
+.winners-carousel__rank--orange {
+  --winner-neon: var(--color-neon-orange);
+}
+
+.winners-carousel__rank--violet {
+  --winner-neon: var(--color-neon-violet);
+}
+
+.winners-carousel__rank--blue {
+  --winner-neon: var(--color-neon-blue);
+}
+
+.winners-carousel__avatar {
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.58;
+  width: 100%;
+}
+
+.winners-carousel__rank-number {
+  align-items: center;
+  display: flex;
+  inset: var(--position-zero);
+  justify-content: center;
+  position: absolute;
+  text-shadow: var(--shadow-winner-number);
 }
 
 .winners-carousel__identity {

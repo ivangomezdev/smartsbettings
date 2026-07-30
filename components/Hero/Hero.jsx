@@ -14,60 +14,80 @@ const topWinners = [
     user: "@nova_27",
     detail: "Arbitraje · Fútbol",
     amount: "+9,840 USDT",
+    avatar: "/testimonial-andrea.webp",
+    neon: "cyan",
   },
   {
     rank: 2,
     user: "@atlas_mx",
     detail: "Predicción · NBA",
     amount: "+9,320 USDT",
+    avatar: "/testimonial-carlos.webp",
+    neon: "magenta",
   },
   {
     rank: 3,
     user: "@safira_r",
     detail: "Arbitraje · Tenis",
     amount: "+8,760 USDT",
+    avatar: "/testimonial-valeria.webp",
+    neon: "lime",
   },
   {
     rank: 4,
     user: "@delta_x8",
     detail: "Predicción · Fútbol",
     amount: "+7,950 USDT",
+    avatar: "/testimonial-diego.webp",
+    neon: "orange",
   },
   {
     rank: 5,
     user: "@orion_55",
     detail: "Arbitraje · MLB",
     amount: "+6,880 USDT",
+    avatar: "/testimonial-miguel.webp",
+    neon: "violet",
   },
   {
     rank: 6,
     user: "@zenit_bet",
     detail: "Predicción · Tenis",
     amount: "+5,740 USDT",
+    avatar: "/testimonial-andrea.webp",
+    neon: "blue",
   },
   {
     rank: 7,
     user: "@luna_edge",
     detail: "Arbitraje · NFL",
     amount: "+4,630 USDT",
+    avatar: "/testimonial-carlos.webp",
+    neon: "cyan",
   },
   {
     rank: 8,
     user: "@vector_11",
     detail: "Predicción · NBA",
     amount: "+3,480 USDT",
+    avatar: "/testimonial-valeria.webp",
+    neon: "magenta",
   },
   {
     rank: 9,
     user: "@nexo_win",
     detail: "Arbitraje · Fútbol",
     amount: "+2,250 USDT",
+    avatar: "/testimonial-diego.webp",
+    neon: "lime",
   },
   {
     rank: 10,
     user: "@aurea_9",
     detail: "Predicción · UFC",
     amount: "+890 USDT",
+    avatar: "/testimonial-miguel.webp",
+    neon: "orange",
   },
 ];
 
@@ -122,9 +142,12 @@ export function Hero() {
                 <p className="hero__terminal-kicker">SmartBetting Private Desk</p>
                 <p className="hero__terminal-title">TOP 10 WINNERS</p>
               </div>
-              <span className="hero__live">
-                <span className="hero__live-dot" aria-hidden="true" />
-                LIVE
+              <span className="hero__live" aria-label="USDT">
+                <img
+                  className="hero__live-logo"
+                  src="/tether-usdt.png"
+                  alt=""
+                />
               </span>
             </div>
             <WinnersCarousel winners={topWinners} />
