@@ -1,0 +1,163 @@
+.winners-carousel {
+  padding: var(--spacing-md);
+}
+
+.winners-carousel__toolbar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+}
+
+.winners-carousel__count {
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-2xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.winners-carousel__toggle {
+  align-items: center;
+  background-color: var(--color-surface-soft);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-2xs);
+  gap: var(--spacing-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  padding: var(--spacing-2xs) var(--spacing-sm);
+  text-transform: uppercase;
+}
+
+.winners-carousel__toggle:focus-visible {
+  outline: var(--outline-width) solid var(--color-primary);
+  outline-offset: var(--outline-offset);
+}
+
+.winners-carousel__toggle:disabled {
+  cursor: default;
+  opacity: var(--opacity-disabled);
+}
+
+.winners-carousel__toggle-icon {
+  border-left: var(--border-thick) solid currentColor;
+  border-right: var(--border-thick) solid currentColor;
+  height: var(--winner-toggle-icon-height);
+  width: var(--winner-toggle-icon-width);
+}
+
+.winners-carousel__toggle-icon--play {
+  border-bottom: var(--winner-toggle-play-border) solid transparent;
+  border-left: var(--winner-toggle-play-width) solid currentColor;
+  border-right: var(--position-zero);
+  border-top: var(--winner-toggle-play-border) solid transparent;
+  height: var(--position-zero);
+  width: var(--position-zero);
+}
+
+.winners-carousel__track {
+  height: calc(
+    var(--winner-notification-height) + var(--winner-notification-height) +
+      var(--winner-notification-height) + var(--spacing-sm) + var(--spacing-sm)
+  );
+  overflow: hidden;
+  position: relative;
+}
+
+.winners-carousel__notification {
+  align-items: center;
+  background:
+    linear-gradient(100deg, var(--color-gold-soft), transparent 42%),
+    var(--color-surface-soft);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: auto minmax(var(--position-zero), 1fr) auto;
+  height: var(--winner-notification-height);
+  left: var(--position-zero);
+  opacity: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  position: absolute;
+  right: var(--position-zero);
+  transition:
+    opacity var(--duration-winner-carousel) var(--ease-standard),
+    transform var(--duration-winner-carousel) var(--ease-winner-carousel);
+  will-change: opacity, transform;
+}
+
+.winners-carousel__notification--incoming {
+  opacity: var(--position-zero);
+  transform: translateY(calc(-100% - var(--spacing-sm)));
+}
+
+.winners-carousel__notification--first {
+  transform: translateY(var(--position-zero));
+}
+
+.winners-carousel__notification--second {
+  transform: translateY(calc(100% + var(--spacing-sm)));
+}
+
+.winners-carousel__notification--third {
+  transform: translateY(
+    calc(200% + var(--spacing-sm) + var(--spacing-sm))
+  );
+}
+
+.winners-carousel__notification--outgoing {
+  opacity: var(--position-zero);
+  transform: translateY(
+    calc(300% + var(--spacing-sm) + var(--spacing-sm) + var(--spacing-sm))
+  );
+}
+
+.winners-carousel__rank {
+  align-items: center;
+  background: var(--gradient-coin);
+  border: var(--border-thin) solid var(--color-gold-border);
+  border-radius: var(--radius-circle);
+  box-shadow: var(--shadow-gold);
+  color: var(--color-gold-bright);
+  display: flex;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  height: var(--winner-rank-size);
+  justify-content: center;
+  width: var(--winner-rank-size);
+}
+
+.winners-carousel__identity {
+  min-width: var(--position-zero);
+}
+
+.winners-carousel__user {
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.winners-carousel__detail {
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-2xs);
+  margin-top: var(--spacing-2xs);
+}
+
+.winners-carousel__amount {
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-wide);
+  text-shadow: var(--shadow-text-primary);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .winners-carousel__notification {
+    transition: none;
+  }
+}

@@ -131,6 +131,12 @@
   --button-arrow-head-size: 0.375rem;
   --video-play-icon-border: 0.35rem;
   --video-play-icon-width: 0.55rem;
+  --winner-notification-height: 4.35rem;
+  --winner-rank-size: 2.5rem;
+  --winner-toggle-icon-height: 0.625rem;
+  --winner-toggle-icon-width: 0.5rem;
+  --winner-toggle-play-border: 0.25rem;
+  --winner-toggle-play-width: 0.4rem;
   --logo-frame-height: 2.25rem;
   --logo-frame-width: 4.75rem;
   --logo-crop-size: 5rem;
@@ -205,9 +211,11 @@
   --duration-highlight: 780ms;
   --duration-pulse: 2s;
   --duration-ticker: 28s;
+  --duration-winner-carousel: 680ms;
   --delay-highlight-color: 390ms;
   --ease-highlight: cubic-bezier(0.76, 0, 0.24, 1);
   --ease-standard: ease;
+  --ease-winner-carousel: cubic-bezier(0.22, 1, 0.36, 1);
   --z-content: 1;
   --z-header: 20;
 }

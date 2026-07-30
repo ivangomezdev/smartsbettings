@@ -1,4 +1,5 @@
 import { Button } from "../Button/Button.jsx";
+import { WinnersCarousel } from "../WinnersCarousel/WinnersCarousel.jsx";
 import { HeroBackgroundVideo } from "./HeroBackgroundVideo.jsx";
 
 const heroStats = [
@@ -7,30 +8,66 @@ const heroStats = [
   { value: "USDT", label: "Pagos simples" },
 ];
 
-const userGains = [
+const topWinners = [
   {
-    initials: "NV",
+    rank: 1,
     user: "@nova_27",
     detail: "Arbitraje · Fútbol",
-    amount: "+9,480 USDT",
+    amount: "+9,840 USDT",
   },
   {
-    initials: "AM",
+    rank: 2,
     user: "@atlas_mx",
     detail: "Predicción · NBA",
-    amount: "+7,265 USDT",
+    amount: "+9,320 USDT",
   },
   {
-    initials: "SR",
+    rank: 3,
     user: "@safira_r",
     detail: "Arbitraje · Tenis",
-    amount: "+4,890 USDT",
+    amount: "+8,760 USDT",
   },
   {
-    initials: "DX",
+    rank: 4,
     user: "@delta_x8",
     detail: "Predicción · Fútbol",
-    amount: "+875 USDT",
+    amount: "+7,950 USDT",
+  },
+  {
+    rank: 5,
+    user: "@orion_55",
+    detail: "Arbitraje · MLB",
+    amount: "+6,880 USDT",
+  },
+  {
+    rank: 6,
+    user: "@zenit_bet",
+    detail: "Predicción · Tenis",
+    amount: "+5,740 USDT",
+  },
+  {
+    rank: 7,
+    user: "@luna_edge",
+    detail: "Arbitraje · NFL",
+    amount: "+4,630 USDT",
+  },
+  {
+    rank: 8,
+    user: "@vector_11",
+    detail: "Predicción · NBA",
+    amount: "+3,480 USDT",
+  },
+  {
+    rank: 9,
+    user: "@nexo_win",
+    detail: "Arbitraje · Fútbol",
+    amount: "+2,250 USDT",
+  },
+  {
+    rank: 10,
+    user: "@aurea_9",
+    detail: "Predicción · UFC",
+    amount: "+890 USDT",
   },
 ];
 
@@ -83,41 +120,17 @@ export function Hero() {
             <div className="hero__terminal-bar">
               <div>
                 <p className="hero__terminal-kicker">SmartBetting Private Desk</p>
-                <p className="hero__terminal-title">Ganancias recientes</p>
+                <p className="hero__terminal-title">TOP 10 WINNERS</p>
               </div>
               <span className="hero__live">
                 <span className="hero__live-dot" aria-hidden="true" />
                 LIVE
               </span>
             </div>
-            <div className="hero__vault">
-              <div>
-                <p className="hero__vault-label">Actividad de la comunidad</p>
-                <p className="hero__vault-value">Resultados en USDT</p>
-              </div>
-              <div className="hero__vault-coins" aria-hidden="true">
-                <span className="hero__vault-coin">₿</span>
-                <span className="hero__vault-coin">Ξ</span>
-                <span className="hero__vault-coin">₮</span>
-              </div>
-            </div>
-            <div className="hero__earnings">
-              {userGains.map((gain) => (
-                <article className="hero__earning" key={gain.user}>
-                  <span className="hero__earning-avatar" aria-hidden="true">
-                    {gain.initials}
-                  </span>
-                  <div className="hero__earning-user">
-                    <h2 className="hero__earning-name">{gain.user}</h2>
-                    <p className="hero__earning-detail">{gain.detail}</p>
-                  </div>
-                  <strong className="hero__earning-amount">{gain.amount}</strong>
-                </article>
-              ))}
-            </div>
+            <WinnersCarousel winners={topWinners} />
             <div className="hero__terminal-footer">
               <span>Perfiles y montos ilustrativos</span>
-              <span className="hero__scan">Actualización en vivo</span>
+              <span className="hero__scan">Ranking automático</span>
             </div>
           </div>
         </div>
