@@ -515,17 +515,24 @@
   .hero__chips-video-frame {
     aspect-ratio: 16 / 9;
     display: block;
-    margin-top: var(--spacing-md);
+    left: 50%;
+    margin-top: var(--position-zero);
     overflow: hidden;
     position: relative;
-    width: 100%;
+    transform: translateX(-50%);
+    width: 100vw;
   }
 
   .hero__chips-video {
     display: block;
     height: 100%;
+    mix-blend-mode: screen;
     object-fit: cover;
     width: 100%;
+  }
+
+  .hero__ticker {
+    margin-top: var(--position-zero);
   }
 
   .hero__chips-video-play {
