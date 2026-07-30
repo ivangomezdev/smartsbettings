@@ -1,4 +1,6 @@
 :root {
+  --color-black: #000000;
+  --color-white: #ffffff;
   --color-background: #040704;
   --color-header: rgba(4, 7, 4, 0.88);
   --color-surface: #0a0f0a;
