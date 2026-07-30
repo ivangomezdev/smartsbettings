@@ -211,6 +211,7 @@
   --opacity-glass-glow: 0.52;
   --blur-panel: 1rem;
   --blur-glass: 1.5rem;
+  --blur-step-card: 0.2rem;
   --blur-ambient: 5rem;
   --saturation-glass: 140%;
   --duration-fast: 180ms;
