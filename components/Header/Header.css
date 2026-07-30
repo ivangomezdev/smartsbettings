@@ -83,9 +83,8 @@
 
 .header__menu-toggle {
   align-items: center;
-  background: var(--color-surface);
-  border: var(--border-thin) solid var(--color-border-strong);
-  border-radius: var(--radius-md);
+  background: transparent;
+  border: var(--position-zero);
   cursor: pointer;
   display: inline-flex;
   height: 3rem;
@@ -93,16 +92,7 @@
   justify-self: end;
   overflow: hidden;
   padding: var(--position-zero);
-  transition:
-    border-color var(--duration-fast) var(--ease-standard),
-    box-shadow var(--duration-fast) var(--ease-standard);
   width: 3rem;
-}
-
-.header__menu-toggle:hover,
-.header__menu-toggle--open {
-  border-color: var(--color-border-primary);
-  box-shadow: 0 0 1.5rem var(--color-primary-halo);
 }
 
 .header__menu-toggle:focus-visible {
