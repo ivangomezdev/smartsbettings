@@ -501,11 +501,16 @@
 
 @media (max-width: 767px) {
   .hero__visual {
+    justify-self: center;
+    min-width: var(--position-zero);
     min-height: var(--position-zero);
     padding-top: var(--spacing-2xl);
+    width: 100%;
   }
 
   .hero__terminal {
+    margin-inline: auto;
+    max-width: var(--terminal-width);
     position: relative;
     right: auto;
     top: auto;
@@ -515,12 +520,11 @@
   .hero__chips-video-frame {
     aspect-ratio: 16 / 9;
     display: block;
-    left: 50%;
+    left: calc(0rem - var(--spacing-lg));
     margin-top: var(--position-zero);
     overflow: hidden;
     position: relative;
-    transform: translateX(-50%);
-    width: 100vw;
+    width: calc(100% + var(--spacing-lg) + var(--spacing-lg));
   }
 
   .hero__chips-video {
@@ -533,34 +537,6 @@
 
   .hero__ticker {
     margin-top: var(--position-zero);
-  }
-
-  .hero__chips-video-play {
-    align-items: center;
-    backdrop-filter: blur(var(--blur-panel));
-    background-color: var(--color-glass-control);
-    border: var(--border-thin) solid var(--color-gold-border);
-    border-radius: var(--radius-pill);
-    color: var(--color-gold-bright);
-    cursor: pointer;
-    display: flex;
-    font-family: var(--font-heading);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-bold);
-    gap: var(--spacing-sm);
-    left: 50%;
-    min-height: var(--control-height);
-    padding: var(--spacing-sm) var(--spacing-lg);
-    position: absolute;
-    text-transform: uppercase;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    white-space: nowrap;
-  }
-
-  .hero__chips-video-play:focus-visible {
-    outline: var(--outline-width) solid var(--color-primary);
-    outline-offset: var(--outline-offset);
   }
 }
 

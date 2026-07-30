@@ -1,11 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 export function MobileChipsVideo() {
   const videoRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [needsTap, setNeedsTap] = useState(false);
 
   const startPlayback = useCallback(async () => {
     const video = videoRef.current;
@@ -24,37 +22,26 @@ export function MobileChipsVideo() {
 
     try {
       await video.play();
-      setNeedsTap(false);
     } catch {
-      setNeedsTap(true);
+      // Safari volverá a intentarlo cuando el video esté listo o al primer toque.
     }
-  }, []);
-
-  useEffect(() => {
-    const mobileViewport = window.matchMedia("(max-width: 767px)");
-    const syncViewport = () => setIsMobile(mobileViewport.matches);
-
-    syncViewport();
-    mobileViewport.addEventListener("change", syncViewport);
-
-    return () => mobileViewport.removeEventListener("change", syncViewport);
   }, []);
 
   useEffect(() => {
     const video = videoRef.current;
+    const mobileViewport = window.matchMedia("(max-width: 767px)");
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     );
 
-    if (!isMobile || !video) {
+    if (!video) {
       return undefined;
     }
 
     function syncPlayback() {
-      if (reducedMotion.matches) {
+      if (!mobileViewport.matches || reducedMotion.matches) {
         video.pause();
         video.currentTime = 0;
-        setNeedsTap(true);
         return;
       }
 
@@ -63,48 +50,33 @@ export function MobileChipsVideo() {
       }
     }
 
-    function handlePlaying() {
-      setNeedsTap(false);
-    }
-
-    function handlePause() {
-      if (
-        document.visibilityState === "visible" &&
-        !reducedMotion.matches &&
-        !video.ended
-      ) {
-        setNeedsTap(true);
-      }
+    function handleViewportChange() {
+      video.load();
+      syncPlayback();
     }
 
     syncPlayback();
     video.addEventListener("loadedmetadata", syncPlayback);
     video.addEventListener("canplay", syncPlayback);
-    video.addEventListener("playing", handlePlaying);
-    video.addEventListener("pause", handlePause);
     window.addEventListener("pageshow", syncPlayback);
     window.addEventListener("touchstart", syncPlayback, { passive: true });
     window.addEventListener("click", syncPlayback);
     document.addEventListener("visibilitychange", syncPlayback);
     reducedMotion.addEventListener("change", syncPlayback);
+    mobileViewport.addEventListener("change", handleViewportChange);
 
     return () => {
       video.removeEventListener("loadedmetadata", syncPlayback);
       video.removeEventListener("canplay", syncPlayback);
-      video.removeEventListener("playing", handlePlaying);
-      video.removeEventListener("pause", handlePause);
       window.removeEventListener("pageshow", syncPlayback);
       window.removeEventListener("touchstart", syncPlayback);
       window.removeEventListener("click", syncPlayback);
       document.removeEventListener("visibilitychange", syncPlayback);
       reducedMotion.removeEventListener("change", syncPlayback);
+      mobileViewport.removeEventListener("change", handleViewportChange);
       video.pause();
     };
-  }, [isMobile, startPlayback]);
-
-  if (!isMobile) {
-    return null;
-  }
+  }, [startPlayback]);
 
   return (
     <div className="hero__chips-video-frame">
@@ -121,19 +93,12 @@ export function MobileChipsVideo() {
         tabIndex={-1}
         aria-hidden="true"
       >
-        <source src="/chips.mp4" type="video/mp4" />
+        <source
+          src="/chips.mp4"
+          type="video/mp4"
+          media="(max-width: 767px)"
+        />
       </video>
-      {needsTap ? (
-        <button
-          className="hero__chips-video-play"
-          type="button"
-          onClick={startPlayback}
-          aria-label="Reproducir el video de fichas"
-        >
-          <span className="hero__video-play-icon" aria-hidden="true" />
-          Activar video
-        </button>
-      ) : null}
     </div>
   );
 }
