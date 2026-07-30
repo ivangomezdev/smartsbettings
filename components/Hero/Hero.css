@@ -579,25 +579,46 @@
 
 @media (max-width: 575px) {
   .hero {
-    padding-top: var(--spacing-3xl);
+    padding-top: calc(var(--hero-video-mobile-height) + var(--spacing-xl));
+  }
+
+  .hero__video-frame,
+  .hero__media {
+    bottom: auto;
+    height: var(--hero-video-mobile-height);
+  }
+
+  .hero__video-frame {
+    background-color: var(--color-background);
   }
 
   .hero__background-video {
-    object-position: 62% center;
+    object-fit: contain;
+    object-position: center;
   }
 
   .hero__video-frame::after {
     background:
-      radial-gradient(circle at 78% 18%, var(--color-gold-halo), transparent 28%),
-      linear-gradient(180deg, rgba(4, 7, 4, 0.7), rgba(4, 7, 4, 0.92) 54%, rgba(4, 7, 4, 0.98));
+      radial-gradient(circle at 82% 18%, var(--color-gold-halo), transparent 30%),
+      linear-gradient(180deg, transparent 58%, var(--color-background) 100%);
+  }
+
+  .hero__video-play {
+    bottom: auto;
+    right: var(--spacing-md);
+    top: calc(var(--hero-video-mobile-height) - var(--control-height) - var(--spacing-md));
+  }
+
+  .hero__background-watermark {
+    display: none;
   }
 
   .hero__crypto-layer {
-    height: 34rem;
-    opacity: 0.64;
-    right: -4rem;
-    top: 1rem;
-    width: 22rem;
+    height: 100%;
+    opacity: 0.42;
+    right: var(--position-zero);
+    top: var(--position-zero);
+    width: 100%;
   }
 
   .hero__crypto-coin--usdc,
