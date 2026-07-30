@@ -49,14 +49,14 @@
   background-repeat: no-repeat;
   background-size: cover;
   filter: saturate(0.72) contrast(1.08);
-  opacity: 0.16;
+  opacity: 0.28;
   transition: opacity var(--duration-fast) var(--ease-standard);
 }
 
 .how-it-works__step::after {
   background:
-    linear-gradient(90deg, rgba(4, 7, 4, 0.88), rgba(4, 7, 4, 0.48)),
-    linear-gradient(180deg, transparent 45%, rgba(4, 7, 4, 0.62));
+    linear-gradient(90deg, rgba(4, 7, 4, 0.68), rgba(4, 7, 4, 0.3)),
+    linear-gradient(180deg, transparent 45%, rgba(4, 7, 4, 0.42));
 }
 
 .how-it-works__step > * {
@@ -70,7 +70,7 @@
 }
 
 .how-it-works__step:hover::before {
-  opacity: 0.21;
+  opacity: 0.35;
 }
 
 .how-it-works__number {

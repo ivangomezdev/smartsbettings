@@ -2,62 +2,6 @@
   padding: var(--spacing-md);
 }
 
-.winners-carousel__toolbar {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: var(--spacing-sm);
-}
-
-.winners-carousel__count {
-  color: var(--color-text-subtle);
-  font-size: var(--font-size-2xs);
-  letter-spacing: var(--letter-spacing-wide);
-  text-transform: uppercase;
-}
-
-.winners-carousel__toggle {
-  align-items: center;
-  background-color: var(--color-surface-soft);
-  border: var(--border-thin) solid var(--color-border);
-  border-radius: var(--radius-pill);
-  color: var(--color-text-muted);
-  cursor: pointer;
-  display: inline-flex;
-  font-family: var(--font-heading);
-  font-size: var(--font-size-2xs);
-  gap: var(--spacing-xs);
-  letter-spacing: var(--letter-spacing-wide);
-  padding: var(--spacing-2xs) var(--spacing-sm);
-  text-transform: uppercase;
-}
-
-.winners-carousel__toggle:focus-visible {
-  outline: var(--outline-width) solid var(--color-primary);
-  outline-offset: var(--outline-offset);
-}
-
-.winners-carousel__toggle:disabled {
-  cursor: default;
-  opacity: var(--opacity-disabled);
-}
-
-.winners-carousel__toggle-icon {
-  border-left: var(--border-thick) solid currentColor;
-  border-right: var(--border-thick) solid currentColor;
-  height: var(--winner-toggle-icon-height);
-  width: var(--winner-toggle-icon-width);
-}
-
-.winners-carousel__toggle-icon--play {
-  border-bottom: var(--winner-toggle-play-border) solid transparent;
-  border-left: var(--winner-toggle-play-width) solid currentColor;
-  border-right: var(--position-zero);
-  border-top: var(--winner-toggle-play-border) solid transparent;
-  height: var(--position-zero);
-  width: var(--position-zero);
-}
-
 .winners-carousel__track {
   height: calc(
     var(--winner-notification-height) + var(--winner-notification-height) +

@@ -276,20 +276,6 @@
   padding: var(--spacing-xs) var(--spacing-sm);
 }
 
-.hero__terminal-footer {
-  align-items: center;
-  border-top: var(--border-thin) solid var(--color-border);
-  color: var(--color-text-subtle);
-  display: flex;
-  font-size: var(--font-size-2xs);
-  justify-content: space-between;
-  padding: var(--spacing-md) var(--spacing-lg);
-}
-
-.hero__scan {
-  color: var(--color-primary);
-}
-
 .hero__ticker {
   border-bottom: var(--border-thin) solid var(--color-border);
   border-top: var(--border-thin) solid var(--color-border);

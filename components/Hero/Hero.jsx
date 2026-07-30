@@ -128,10 +128,6 @@ export function Hero() {
               </span>
             </div>
             <WinnersCarousel winners={topWinners} />
-            <div className="hero__terminal-footer">
-              <span>Perfiles y montos ilustrativos</span>
-              <span className="hero__scan">Ranking automático</span>
-            </div>
           </div>
         </div>
       </div>

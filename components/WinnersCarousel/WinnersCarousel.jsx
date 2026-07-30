@@ -11,7 +11,6 @@ const movingSlots = ["first", "second", "third", "outgoing"];
 export function WinnersCarousel({ winners }) {
   const [headIndex, setHeadIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
   const settleTimerRef = useRef(null);
 
   useEffect(() => {
@@ -19,7 +18,7 @@ export function WinnersCarousel({ winners }) {
       "(prefers-reduced-motion: reduce)",
     );
 
-    if (isPaused || reducedMotion.matches) {
+    if (reducedMotion.matches) {
       return undefined;
     }
 
@@ -38,7 +37,7 @@ export function WinnersCarousel({ winners }) {
       window.clearInterval(rotationTimer);
       window.clearTimeout(settleTimerRef.current);
     };
-  }, [isPaused, winners.length]);
+  }, [winners.length]);
 
   const visibleWinners = [-1, 0, 1, 2].map((offset) => {
     const winnerIndex = (headIndex + offset + winners.length) % winners.length;
@@ -50,26 +49,6 @@ export function WinnersCarousel({ winners }) {
       className="winners-carousel"
       aria-label="Carrusel de los diez usuarios con mayores ganancias"
     >
-      <div className="winners-carousel__toolbar">
-        <span className="winners-carousel__count">
-          3 en pantalla · 10 totales
-        </span>
-        <button
-          className="winners-carousel__toggle"
-          type="button"
-          aria-pressed={isPaused}
-          disabled={isAnimating}
-          onClick={() => setIsPaused((currentValue) => !currentValue)}
-        >
-          <span
-            className={`winners-carousel__toggle-icon${
-              isPaused ? " winners-carousel__toggle-icon--play" : ""
-            }`}
-            aria-hidden="true"
-          />
-          {isPaused ? "Reanudar" : "Pausar"}
-        </button>
-      </div>
       <div className="winners-carousel__track" aria-live="off">
         {visibleWinners.map((winner, index) => {
           const slot = isAnimating ? movingSlots[index] : restingSlots[index];
