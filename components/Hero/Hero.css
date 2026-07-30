@@ -5,7 +5,8 @@
   position: relative;
 }
 
-.hero__media {
+.hero__media,
+.hero__video-frame {
   inset: var(--position-zero);
   isolation: isolate;
   overflow: hidden;
@@ -14,7 +15,7 @@
   z-index: var(--position-zero);
 }
 
-.hero__media::after {
+.hero__video-frame::after {
   background:
     radial-gradient(circle at 76% 24%, var(--color-gold-halo), transparent 24%),
     linear-gradient(90deg, rgba(4, 7, 4, 0.97), rgba(4, 7, 4, 0.76) 48%, rgba(4, 7, 4, 0.42)),
@@ -23,6 +24,43 @@
   inset: var(--position-zero);
   position: absolute;
   z-index: 3;
+}
+
+.hero__video-play {
+  align-items: center;
+  backdrop-filter: blur(var(--blur-panel));
+  background-color: var(--color-glass-control);
+  border: var(--border-thin) solid var(--color-gold-border);
+  border-radius: var(--radius-pill);
+  bottom: var(--spacing-3xl);
+  box-shadow: var(--shadow-gold);
+  color: var(--color-gold-bright);
+  cursor: pointer;
+  display: flex;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  gap: var(--spacing-sm);
+  letter-spacing: var(--letter-spacing-wide);
+  min-height: var(--control-height);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  position: absolute;
+  right: var(--spacing-lg);
+  text-transform: uppercase;
+  z-index: calc(var(--z-header) - 1);
+}
+
+.hero__video-play:focus-visible {
+  outline: var(--outline-width) solid var(--color-primary);
+  outline-offset: var(--outline-offset);
+}
+
+.hero__video-play-icon {
+  border-bottom: var(--video-play-icon-border) solid transparent;
+  border-left: var(--video-play-icon-width) solid currentColor;
+  border-top: var(--video-play-icon-border) solid transparent;
+  height: var(--position-zero);
+  width: var(--position-zero);
 }
 
 .hero__background-video {
@@ -548,7 +586,7 @@
     object-position: 62% center;
   }
 
-  .hero__media::after {
+  .hero__video-frame::after {
     background:
       radial-gradient(circle at 78% 18%, var(--color-gold-halo), transparent 28%),
       linear-gradient(180deg, rgba(4, 7, 4, 0.7), rgba(4, 7, 4, 0.92) 54%, rgba(4, 7, 4, 0.98));

@@ -47,8 +47,8 @@ const cryptoCoins = [
 export function Hero() {
   return (
     <section className="hero" id="inicio">
+      <HeroBackgroundVideo />
       <div className="hero__media" aria-hidden="true">
-        <HeroBackgroundVideo />
         <div className="hero__background-watermark" />
         <div className="hero__crypto-layer">
           {cryptoCoins.map((coin) => (

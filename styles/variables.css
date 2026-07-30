@@ -124,6 +124,12 @@
   --header-height-mobile: 4.5rem;
   --header-height: 5.25rem;
   --control-height: 3.25rem;
+  --button-arrow-width: 1rem;
+  --button-arrow-height: 0.75rem;
+  --button-arrow-line-width: 0.875rem;
+  --button-arrow-head-size: 0.375rem;
+  --video-play-icon-border: 0.35rem;
+  --video-play-icon-width: 0.55rem;
   --logo-frame-height: 2.25rem;
   --logo-frame-width: 4.75rem;
   --logo-crop-size: 5rem;

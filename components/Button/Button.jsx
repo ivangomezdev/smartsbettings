@@ -11,9 +11,7 @@ export function Button({
       aria-label={ariaLabel}
     >
       <span className="button__label">{children}</span>
-      <span className="button__arrow" aria-hidden="true">
-        ↗
-      </span>
+      <span className="button__arrow" aria-hidden="true" />
     </a>
   );
 }

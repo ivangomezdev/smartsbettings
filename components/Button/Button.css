@@ -48,6 +48,30 @@
 }
 
 .button__arrow {
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-tight);
+  height: var(--button-arrow-height);
+  position: relative;
+  width: var(--button-arrow-width);
+}
+
+.button__arrow::before {
+  background-color: currentColor;
+  content: "";
+  height: var(--border-thin);
+  left: var(--position-zero);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--button-arrow-line-width);
+}
+
+.button__arrow::after {
+  border-right: var(--border-thin) solid currentColor;
+  border-top: var(--border-thin) solid currentColor;
+  content: "";
+  height: var(--button-arrow-head-size);
+  position: absolute;
+  right: var(--position-zero);
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: var(--button-arrow-head-size);
 }
