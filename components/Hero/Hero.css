@@ -490,31 +490,20 @@
     max-width: 18rem;
   }
 
-  .hero__content {
-    isolation: isolate;
-    position: relative;
-  }
-
-  .hero__content::before {
-    background: radial-gradient(
-      ellipse at 32% 46%,
-      rgba(3, 5, 3, 0.84),
-      rgba(3, 5, 3, 0.52) 56%,
-      transparent 82%
-    );
-    content: "";
-    inset: calc(var(--spacing-xl) * -1) calc(var(--spacing-md) * -1);
-    pointer-events: none;
-    position: absolute;
-    z-index: -1;
-  }
-
   .hero__private-label,
   .hero__title,
   .hero__lead,
   .hero__stat-value,
   .hero__stat-label {
-    text-shadow: var(--shadow-text-hero);
+    text-shadow:
+      0 0.125rem 0.25rem rgba(0, 0, 0, 1),
+      0 0.35rem 1.5rem rgba(0, 0, 0, 0.98);
+  }
+
+  .hero__title-accent {
+    text-shadow:
+      0 0.125rem 0.45rem rgba(0, 0, 0, 1),
+      var(--shadow-text-primary);
   }
 
   .hero__lead,
