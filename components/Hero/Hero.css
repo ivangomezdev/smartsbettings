@@ -134,7 +134,7 @@
   border: var(--border-thin) solid var(--color-primary-bright);
   border-radius: var(--radius-pill);
   box-shadow: var(--shadow-primary);
-  color: var(--color-white);
+  color: var(--color-ink);
   display: inline-flex;
   font-family: var(--font-heading);
   font-size: var(--font-size-xs);
@@ -168,7 +168,7 @@
 }
 
 .hero__lead {
-  color: var(--color-text-muted);
+  color: var(--color-text);
   font-size: var(--font-size-lg);
   line-height: var(--line-height-relaxed);
   margin-top: var(--spacing-xl);
@@ -500,7 +500,6 @@
       0 0.35rem 1.5rem rgba(0, 0, 0, 0.98);
   }
 
-  .hero__lead,
   .hero__stat-label {
     color: var(--color-text-muted);
   }
