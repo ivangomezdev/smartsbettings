@@ -1,6 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import {
+  MdSportsBaseball,
+  MdSportsGolf,
+  MdSportsRugby,
+  MdSportsSoccer,
+  MdSportsTennis,
+} from "react-icons/md";
 import { SectionHeading } from "../SectionHeading/SectionHeading.jsx";
 
 const steps = [
@@ -22,6 +29,16 @@ const steps = [
     description:
       "Define tu monto, respeta tus límites y registra el resultado para mantener perspectiva.",
   },
+];
+
+const ambientSportsIcons = [
+  { Icon: MdSportsSoccer, id: "soccer-primary" },
+  { Icon: MdSportsRugby, id: "rugby-primary" },
+  { Icon: MdSportsTennis, id: "tennis-primary" },
+  { Icon: MdSportsGolf, id: "golf-primary" },
+  { Icon: MdSportsBaseball, id: "baseball-primary" },
+  { Icon: MdSportsSoccer, id: "soccer-secondary" },
+  { Icon: MdSportsTennis, id: "tennis-secondary" },
 ];
 
 export function HowItWorks() {
@@ -57,6 +74,15 @@ export function HowItWorks() {
       id="como-funciona"
       ref={sectionRef}
     >
+      <div className="how-it-works__sports-icons" aria-hidden="true">
+        {ambientSportsIcons.map(({ Icon, id }) => (
+          <Icon
+            className={`how-it-works__sports-icon how-it-works__sports-icon--${id}`}
+            focusable="false"
+            key={id}
+          />
+        ))}
+      </div>
       <div className="how-it-works__inner u-container">
         <SectionHeading
           eyebrow="Cómo funciona"

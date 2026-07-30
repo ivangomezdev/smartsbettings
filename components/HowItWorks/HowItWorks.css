@@ -12,6 +12,110 @@
   background-repeat: no-repeat;
   background-size: cover;
   overflow: hidden;
+  position: relative;
+}
+
+.how-it-works__inner {
+  position: relative;
+  z-index: var(--z-content);
+}
+
+.how-it-works__sports-icons {
+  inset: var(--position-zero);
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  z-index: var(--position-zero);
+}
+
+.how-it-works__sports-icon {
+  animation: how-it-works-sport-float var(--sport-duration) linear infinite;
+  animation-delay: var(--sport-delay);
+  color: var(--color-white);
+  font-size: var(--sport-size);
+  left: -12%;
+  opacity: var(--position-zero);
+  position: absolute;
+  top: var(--sport-top);
+  will-change: opacity, transform;
+}
+
+.how-it-works__sports-icon--soccer-primary {
+  --sport-delay: -4s;
+  --sport-duration: 23s;
+  --sport-size: clamp(2.6rem, 5vw, 5rem);
+  --sport-top: 9%;
+  --sport-y-mid: 5rem;
+  --sport-y-late: -2rem;
+  --sport-y-end: 7rem;
+}
+
+.how-it-works__sports-icon--rugby-primary {
+  --sport-delay: -13s;
+  --sport-duration: 29s;
+  --sport-size: clamp(3rem, 6vw, 6rem);
+  --sport-top: 24%;
+  --sport-y-mid: -4rem;
+  --sport-y-late: 6rem;
+  --sport-y-end: -3rem;
+}
+
+.how-it-works__sports-icon--tennis-primary {
+  --sport-delay: -18s;
+  --sport-duration: 21s;
+  --sport-size: clamp(2.2rem, 4vw, 4.25rem);
+  --sport-top: 42%;
+  --sport-y-mid: 7rem;
+  --sport-y-late: -5rem;
+  --sport-y-end: 2rem;
+}
+
+.how-it-works__sports-icon--golf-primary {
+  --sport-delay: -7s;
+  --sport-duration: 31s;
+  --sport-size: clamp(2.8rem, 5.5vw, 5.5rem);
+  --sport-top: 58%;
+  --sport-y-mid: -6rem;
+  --sport-y-late: 4rem;
+  --sport-y-end: -7rem;
+}
+
+.how-it-works__sports-icon--baseball-primary {
+  --sport-delay: -21s;
+  --sport-duration: 25s;
+  --sport-size: clamp(2.5rem, 4.6vw, 4.75rem);
+  --sport-top: 73%;
+  --sport-y-mid: 4rem;
+  --sport-y-late: -7rem;
+  --sport-y-end: 3rem;
+}
+
+.how-it-works__sports-icon--soccer-secondary {
+  --sport-delay: -16s;
+  --sport-duration: 34s;
+  --sport-size: clamp(2rem, 3.6vw, 3.75rem);
+  --sport-top: 86%;
+  --sport-y-mid: -5rem;
+  --sport-y-late: 3rem;
+  --sport-y-end: -4rem;
+}
+
+.how-it-works__sports-icon--tennis-secondary {
+  --sport-delay: -9s;
+  --sport-duration: 27s;
+  --sport-size: clamp(1.9rem, 3.4vw, 3.5rem);
+  --sport-top: 34%;
+  --sport-y-mid: -7rem;
+  --sport-y-late: 5rem;
+  --sport-y-end: -2rem;
+}
+
+.how-it-works__sports-icon--rugby-primary,
+.how-it-works__sports-icon--golf-primary,
+.how-it-works__sports-icon--tennis-secondary {
+  animation-name: how-it-works-sport-float-reverse;
+  left: auto;
+  right: -12%;
 }
 
 .how-it-works__steps {
@@ -156,6 +260,64 @@
   }
 }
 
+@keyframes how-it-works-sport-float {
+  0% {
+    opacity: var(--position-zero);
+    transform: translate3d(-8vw, var(--position-zero), var(--position-zero))
+      rotate(0deg);
+  }
+
+  12%,
+  88% {
+    opacity: var(--opacity-sports-icon);
+  }
+
+  36% {
+    transform: translate3d(42vw, var(--sport-y-mid), var(--position-zero))
+      rotate(135deg);
+  }
+
+  68% {
+    transform: translate3d(84vw, var(--sport-y-late), var(--position-zero))
+      rotate(285deg);
+  }
+
+  100% {
+    opacity: var(--position-zero);
+    transform: translate3d(126vw, var(--sport-y-end), var(--position-zero))
+      rotate(420deg);
+  }
+}
+
+@keyframes how-it-works-sport-float-reverse {
+  0% {
+    opacity: var(--position-zero);
+    transform: translate3d(8vw, var(--position-zero), var(--position-zero))
+      rotate(0deg);
+  }
+
+  12%,
+  88% {
+    opacity: var(--opacity-sports-icon);
+  }
+
+  36% {
+    transform: translate3d(-42vw, var(--sport-y-mid), var(--position-zero))
+      rotate(-135deg);
+  }
+
+  68% {
+    transform: translate3d(-84vw, var(--sport-y-late), var(--position-zero))
+      rotate(-285deg);
+  }
+
+  100% {
+    opacity: var(--position-zero);
+    transform: translate3d(-126vw, var(--sport-y-end), var(--position-zero))
+      rotate(-420deg);
+  }
+}
+
 @media (min-width: 768px) {
   .how-it-works {
     background-image:
@@ -191,5 +353,9 @@
     animation: none;
     background-size: 100% 100%;
     color: var(--color-black);
+  }
+
+  .how-it-works__sports-icons {
+    display: none;
   }
 }
