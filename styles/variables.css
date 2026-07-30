@@ -217,6 +217,8 @@
   --duration-fast: 180ms;
   --duration-highlight-color: 220ms;
   --duration-highlight: 780ms;
+  --duration-highlight-delay: 320ms;
+  --duration-highlight-text-delay: 804ms;
   --duration-pulse: 2s;
   --duration-ticker: 28s;
   --duration-winner-carousel: 680ms;

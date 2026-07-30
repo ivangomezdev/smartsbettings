@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import { SectionHeading } from "../SectionHeading/SectionHeading.jsx";
 
 const steps = [
@@ -22,12 +25,49 @@ const steps = [
 ];
 
 export function HowItWorks() {
+  const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (!("IntersectionObserver" in window)) {
+      setIsVisible(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.28 },
+    );
+
+    observer.observe(sectionRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="how-it-works u-section" id="como-funciona">
+    <section
+      className={`how-it-works u-section${
+        isVisible ? " how-it-works--visible" : ""
+      }`}
+      id="como-funciona"
+      ref={sectionRef}
+    >
       <div className="how-it-works__inner u-container">
         <SectionHeading
           eyebrow="Cómo funciona"
-          title="De la señal a la decisión, en tres pasos."
+          title={
+            <>
+              De la señal a la decisión,{" "}
+              <span className="how-it-works__title-highlight">
+                en tres pasos.
+              </span>
+            </>
+          }
           align="center"
         />
         <div className="how-it-works__steps">
