@@ -1,4 +1,11 @@
 import { Button } from "../Button/Button.jsx";
+import {
+  MdSportsBaseball,
+  MdSportsGolf,
+  MdSportsRugby,
+  MdSportsSoccer,
+  MdSportsTennis,
+} from "react-icons/md";
 import { WinnersCarousel } from "../WinnersCarousel/WinnersCarousel.jsx";
 import { HeroBackgroundVideo } from "./HeroBackgroundVideo.jsx";
 
@@ -6,6 +13,14 @@ const heroStats = [
   { value: "24/7", label: "Monitoreo" },
   { value: "+18", label: "Deportes" },
   { value: "USDT", label: "Pagos simples" },
+];
+
+const terminalSportsIcons = [
+  { Icon: MdSportsSoccer, id: "soccer" },
+  { Icon: MdSportsRugby, id: "rugby" },
+  { Icon: MdSportsTennis, id: "tennis" },
+  { Icon: MdSportsGolf, id: "golf" },
+  { Icon: MdSportsBaseball, id: "baseball" },
 ];
 
 const topWinners = [
@@ -137,6 +152,15 @@ export function Hero() {
 
         <div className="hero__visual" aria-label="Vista previa de ganancias de usuarios ficticios">
           <div className="hero__terminal">
+            <div className="hero__terminal-sports-icons" aria-hidden="true">
+              {terminalSportsIcons.map(({ Icon, id }) => (
+                <Icon
+                  className={`hero__terminal-sports-icon hero__terminal-sports-icon--${id}`}
+                  focusable="false"
+                  key={id}
+                />
+              ))}
+            </div>
             <div className="hero__terminal-bar">
               <div>
                 <p className="hero__terminal-kicker">SmartBetting Private Desk</p>

@@ -236,6 +236,76 @@
   position: absolute;
   right: 12%;
   top: var(--position-zero);
+  z-index: calc(var(--z-content) + 1);
+}
+
+.hero__terminal-sports-icons {
+  inset: var(--position-zero);
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  z-index: var(--position-zero);
+}
+
+.hero__terminal-sports-icon {
+  animation: hero-terminal-sport-float var(--terminal-icon-duration) linear
+    infinite;
+  animation-delay: var(--terminal-icon-delay);
+  color: var(--color-white);
+  font-size: var(--terminal-sports-icon-size);
+  left: -8%;
+  opacity: var(--position-zero);
+  position: absolute;
+  top: var(--terminal-icon-top);
+  will-change: opacity, transform;
+}
+
+.hero__terminal-sports-icon--soccer {
+  --terminal-icon-delay: -3s;
+  --terminal-icon-duration: 16s;
+  --terminal-icon-top: 13%;
+  --terminal-icon-y: 3.5rem;
+}
+
+.hero__terminal-sports-icon--rugby {
+  --terminal-icon-delay: -11s;
+  --terminal-icon-duration: 19s;
+  --terminal-icon-top: 31%;
+  --terminal-icon-y: -2.75rem;
+}
+
+.hero__terminal-sports-icon--tennis {
+  --terminal-icon-delay: -7s;
+  --terminal-icon-duration: 14s;
+  --terminal-icon-top: 49%;
+  --terminal-icon-y: 2.25rem;
+}
+
+.hero__terminal-sports-icon--golf {
+  --terminal-icon-delay: -15s;
+  --terminal-icon-duration: 21s;
+  --terminal-icon-top: 67%;
+  --terminal-icon-y: -3rem;
+}
+
+.hero__terminal-sports-icon--baseball {
+  --terminal-icon-delay: -5s;
+  --terminal-icon-duration: 18s;
+  --terminal-icon-top: 84%;
+  --terminal-icon-y: 1.75rem;
+}
+
+.hero__terminal-sports-icon--rugby,
+.hero__terminal-sports-icon--golf {
+  animation-name: hero-terminal-sport-float-reverse;
+  left: auto;
+  right: -8%;
+}
+
+.hero__terminal-bar,
+.hero__terminal > .winners-carousel {
+  position: relative;
+  z-index: var(--z-content);
 }
 
 .hero__terminal-bar {
@@ -284,6 +354,54 @@
   padding-block: var(--spacing-md);
   position: relative;
   z-index: calc(var(--z-content) + 1);
+}
+
+@keyframes hero-terminal-sport-float {
+  0% {
+    opacity: var(--position-zero);
+    transform: translate3d(-2rem, var(--position-zero), var(--position-zero))
+      rotate(0deg);
+  }
+
+  14%,
+  86% {
+    opacity: var(--opacity-sports-icon);
+  }
+
+  50% {
+    transform: translate3d(18rem, var(--terminal-icon-y), var(--position-zero))
+      rotate(180deg);
+  }
+
+  100% {
+    opacity: var(--position-zero);
+    transform: translate3d(36rem, var(--position-zero), var(--position-zero))
+      rotate(360deg);
+  }
+}
+
+@keyframes hero-terminal-sport-float-reverse {
+  0% {
+    opacity: var(--position-zero);
+    transform: translate3d(2rem, var(--position-zero), var(--position-zero))
+      rotate(0deg);
+  }
+
+  14%,
+  86% {
+    opacity: var(--opacity-sports-icon);
+  }
+
+  50% {
+    transform: translate3d(-18rem, var(--terminal-icon-y), var(--position-zero))
+      rotate(-180deg);
+  }
+
+  100% {
+    opacity: var(--position-zero);
+    transform: translate3d(-36rem, var(--position-zero), var(--position-zero))
+      rotate(-360deg);
+  }
 }
 
 .hero__ticker-track {
@@ -395,5 +513,9 @@
   .hero__status-dot,
   .hero__ticker-track {
     animation: none;
+  }
+
+  .hero__terminal-sports-icons {
+    display: none;
   }
 }
