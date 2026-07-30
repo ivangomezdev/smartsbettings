@@ -54,13 +54,12 @@ export function HeroBackgroundVideo() {
       muted
       loop
       playsInline
-      poster="/hero-sports-crypto-poster.webp"
       preload="auto"
       disablePictureInPicture
       tabIndex={-1}
       aria-hidden="true"
     >
-      <source src="/hero-sports-crypto-v2.mp4" type="video/mp4" />
+      <source src="/luxury.mp4" type="video/mp4" />
     </video>
   );
 }

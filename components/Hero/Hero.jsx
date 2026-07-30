@@ -7,20 +7,30 @@ const heroStats = [
   { value: "USDT", label: "Pagos simples" },
 ];
 
-const opportunities = [
+const userGains = [
   {
-    sport: "Fútbol",
-    event: "Madrid vs. Londres",
-    market: "Resultado final",
-    edge: "+4.8%",
-    status: "Alta",
+    initials: "NV",
+    user: "@nova_27",
+    detail: "Arbitraje · Fútbol",
+    amount: "+9,480 USDT",
   },
   {
-    sport: "Tenis",
-    event: "Roma — Cuartos",
-    market: "Ganador del partido",
-    edge: "+3.2%",
-    status: "Nueva",
+    initials: "AM",
+    user: "@atlas_mx",
+    detail: "Predicción · NBA",
+    amount: "+7,265 USDT",
+  },
+  {
+    initials: "SR",
+    user: "@safira_r",
+    detail: "Arbitraje · Tenis",
+    amount: "+4,890 USDT",
+  },
+  {
+    initials: "DX",
+    user: "@delta_x8",
+    detail: "Predicción · Fútbol",
+    amount: "+875 USDT",
   },
 ];
 
@@ -88,12 +98,12 @@ export function Hero() {
           </ul>
         </div>
 
-        <div className="hero__visual" aria-label="Vista previa de oportunidades">
+        <div className="hero__visual" aria-label="Vista previa de ganancias de usuarios ficticios">
           <div className="hero__terminal">
             <div className="hero__terminal-bar">
               <div>
                 <p className="hero__terminal-kicker">SmartBetting Private Desk</p>
-                <p className="hero__terminal-title">Oportunidades selectas</p>
+                <p className="hero__terminal-title">Ganancias recientes</p>
               </div>
               <span className="hero__live">
                 <span className="hero__live-dot" aria-hidden="true" />
@@ -102,8 +112,8 @@ export function Hero() {
             </div>
             <div className="hero__vault">
               <div>
-                <p className="hero__vault-label">Bóveda digital</p>
-                <p className="hero__vault-value">USDT · BTC · ETH</p>
+                <p className="hero__vault-label">Actividad de la comunidad</p>
+                <p className="hero__vault-value">Resultados en USDT</p>
               </div>
               <div className="hero__vault-coins" aria-hidden="true">
                 <span className="hero__vault-coin">₿</span>
@@ -111,24 +121,23 @@ export function Hero() {
                 <span className="hero__vault-coin">₮</span>
               </div>
             </div>
-            <div className="hero__opportunities">
-              {opportunities.map((opportunity) => (
-                <article className="hero__opportunity" key={opportunity.event}>
-                  <div className="hero__opportunity-meta">
-                    <span className="hero__sport">{opportunity.sport}</span>
-                    <span className="hero__tag">{opportunity.status}</span>
+            <div className="hero__earnings">
+              {userGains.map((gain) => (
+                <article className="hero__earning" key={gain.user}>
+                  <span className="hero__earning-avatar" aria-hidden="true">
+                    {gain.initials}
+                  </span>
+                  <div className="hero__earning-user">
+                    <h2 className="hero__earning-name">{gain.user}</h2>
+                    <p className="hero__earning-detail">{gain.detail}</p>
                   </div>
-                  <h2 className="hero__event">{opportunity.event}</h2>
-                  <div className="hero__market-row">
-                    <span className="hero__market">{opportunity.market}</span>
-                    <strong className="hero__edge">{opportunity.edge}</strong>
-                  </div>
+                  <strong className="hero__earning-amount">{gain.amount}</strong>
                 </article>
               ))}
             </div>
             <div className="hero__terminal-footer">
-              <span>Actualización automática</span>
-              <span className="hero__scan">Escaneando 42 casas</span>
+              <span>Perfiles y montos ilustrativos</span>
+              <span className="hero__scan">Actualización en vivo</span>
             </div>
           </div>
         </div>

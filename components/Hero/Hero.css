@@ -27,12 +27,10 @@
 
 .hero__background-video {
   backface-visibility: hidden;
-  filter: saturate(0.82) contrast(1.08);
   height: 100%;
   inset: var(--position-zero);
   object-fit: cover;
   object-position: center;
-  opacity: 0.62;
   position: absolute;
   transform: translateZ(0);
   width: 100%;
@@ -389,61 +387,69 @@
   padding: var(--spacing-xs) var(--spacing-sm);
 }
 
-.hero__opportunities {
+.hero__earnings {
   display: grid;
   gap: var(--spacing-sm);
   padding: var(--spacing-md);
 }
 
-.hero__opportunity {
+.hero__earning {
+  align-items: center;
   background-color: var(--color-surface-soft);
   border: var(--border-thin) solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-md) var(--spacing-lg);
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: auto minmax(var(--position-zero), 1fr) auto;
+  padding: var(--spacing-sm) var(--spacing-md);
   transition:
     border-color var(--duration-fast) var(--ease-standard),
     transform var(--duration-fast) var(--ease-standard);
 }
 
-.hero__opportunity:hover {
+.hero__earning:hover {
   border-color: var(--color-border-primary);
   transform: translateX(var(--offset-slide));
 }
 
-.hero__opportunity-meta,
-.hero__market-row {
+.hero__earning-avatar {
   align-items: center;
+  background: var(--gradient-coin);
+  border: var(--border-thin) solid var(--color-gold-border);
+  border-radius: var(--radius-circle);
+  color: var(--color-gold-bright);
   display: flex;
-  justify-content: space-between;
-}
-
-.hero__sport,
-.hero__market {
-  color: var(--color-text-subtle);
+  font-family: var(--font-heading);
   font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  height: 2.25rem;
+  justify-content: center;
+  width: 2.25rem;
 }
 
-.hero__tag {
-  background-color: var(--color-primary-soft);
-  border: var(--border-thin) solid var(--color-border-primary);
-  border-radius: var(--radius-pill);
-  color: var(--color-primary);
-  font-size: var(--font-size-2xs);
-  letter-spacing: var(--letter-spacing-wide);
-  padding: var(--spacing-2xs) var(--spacing-sm);
-  text-transform: uppercase;
+.hero__earning-user {
+  min-width: var(--position-zero);
 }
 
-.hero__event {
+.hero__earning-name {
   color: var(--color-text);
-  font-size: var(--font-size-lg);
-  margin: var(--spacing-md) var(--position-zero);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-wide);
 }
 
-.hero__edge {
+.hero__earning-detail {
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-2xs);
+  margin-top: var(--spacing-2xs);
+}
+
+.hero__earning-amount {
   color: var(--color-primary);
   font-family: var(--font-heading);
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-wide);
+  text-shadow: var(--shadow-text-primary);
+  white-space: nowrap;
 }
 
 .hero__terminal-footer {
@@ -577,16 +583,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__media {
-    background-image: url("/hero-sports-crypto-poster.webp");
-    background-position: center;
-    background-size: cover;
-  }
-
-  .hero__background-video {
-    display: none;
-  }
-
   .hero__background-watermark,
   .hero__crypto-coin,
   .hero__crypto-coin::after {
