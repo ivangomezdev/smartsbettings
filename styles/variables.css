@@ -9,6 +9,11 @@
   --color-primary-bright: #b5ff5a;
   --color-primary-soft: rgba(109, 255, 0, 0.09);
   --color-primary-halo: rgba(109, 255, 0, 0.14);
+  --color-gold: #d8b96c;
+  --color-gold-bright: #fff1b8;
+  --color-gold-soft: rgba(216, 185, 108, 0.12);
+  --color-gold-halo: rgba(216, 185, 108, 0.2);
+  --color-gold-border: rgba(216, 185, 108, 0.38);
   --color-text: #f4f7f1;
   --color-text-muted: #a5aea1;
   --color-text-subtle: #697166;
@@ -26,6 +31,8 @@
   --color-glass-brand: rgba(109, 255, 0, 0.28);
 
   --gradient-primary: linear-gradient(135deg, var(--color-primary-bright), var(--color-primary));
+  --gradient-luxury: linear-gradient(110deg, var(--color-gold-bright), var(--color-gold), var(--color-primary-bright));
+  --gradient-coin: linear-gradient(145deg, rgba(255, 241, 184, 0.28), rgba(216, 185, 108, 0.06) 48%, rgba(5, 9, 5, 0.88));
   --gradient-panel: linear-gradient(145deg, rgba(15, 23, 14, 0.96), rgba(5, 9, 5, 0.9));
   --gradient-section: linear-gradient(180deg, rgba(109, 255, 0, 0.035), transparent 32%);
   --gradient-section-reverse: linear-gradient(0deg, rgba(109, 255, 0, 0.025), transparent 55%);
@@ -93,6 +100,8 @@
   --shadow-primary: 0 0.75rem 2.5rem rgba(109, 255, 0, 0.17);
   --shadow-primary-soft: 0 1.5rem 5rem rgba(109, 255, 0, 0.09);
   --shadow-primary-strong: 0 1rem 3rem rgba(109, 255, 0, 0.28);
+  --shadow-gold: 0 1rem 3rem rgba(216, 185, 108, 0.18);
+  --shadow-coin: inset 0 1px 0 rgba(255, 241, 184, 0.34), inset 0 -0.5rem 1.5rem rgba(0, 0, 0, 0.36), 0 1rem 3rem rgba(0, 0, 0, 0.38);
   --shadow-panel: 0 2rem 7rem rgba(0, 0, 0, 0.52);
   --shadow-text-primary: 0 0 2.5rem rgba(109, 255, 0, 0.3);
   --shadow-glass: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1.5rem 4rem rgba(0, 0, 0, 0.26);

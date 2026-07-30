@@ -43,9 +43,9 @@ export async function generateMetadata() {
       type: "website",
       images: [
         {
-          url: "/og.png",
-          width: 1729,
-          height: 910,
+          url: "/og-luxury.png",
+          width: 1734,
+          height: 907,
           alt: "SmartBetting — Tu ventaja no es suerte. Son datos.",
         },
       ],
@@ -55,7 +55,7 @@ export async function generateMetadata() {
       title: "SmartBetting | Decisiones deportivas con ventaja",
       description:
         "Oportunidades claras, alertas oportunas y control de riesgo.",
-      images: ["/og.png"],
+      images: ["/og-luxury.png"],
     },
     icons: {
       icon: "/smartbettting-logotrans.png",

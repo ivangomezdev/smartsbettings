@@ -15,6 +15,9 @@ export function HeroBackgroundVideo() {
       return undefined;
     }
 
+    video.defaultMuted = true;
+    video.muted = true;
+
     function syncPlayback() {
       if (reducedMotion.matches) {
         video.pause();
@@ -26,9 +29,17 @@ export function HeroBackgroundVideo() {
     }
 
     syncPlayback();
+    video.addEventListener("loadedmetadata", syncPlayback);
+    video.addEventListener("canplay", syncPlayback);
+    window.addEventListener("pageshow", syncPlayback);
+    document.addEventListener("visibilitychange", syncPlayback);
     reducedMotion.addEventListener("change", syncPlayback);
 
     return () => {
+      video.removeEventListener("loadedmetadata", syncPlayback);
+      video.removeEventListener("canplay", syncPlayback);
+      window.removeEventListener("pageshow", syncPlayback);
+      document.removeEventListener("visibilitychange", syncPlayback);
       reducedMotion.removeEventListener("change", syncPlayback);
       video.pause();
     };
@@ -38,11 +49,14 @@ export function HeroBackgroundVideo() {
     <video
       className="hero__background-video"
       ref={videoRef}
+      autoPlay
+      defaultMuted
       muted
       loop
       playsInline
       poster="/hero-sports-crypto-poster.webp"
-      preload="metadata"
+      preload="auto"
+      disablePictureInPicture
       tabIndex={-1}
       aria-hidden="true"
     >

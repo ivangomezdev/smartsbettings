@@ -24,6 +24,16 @@ const opportunities = [
   },
 ];
 
+const cryptoCoins = [
+  { symbol: "₿", label: "Bitcoin", tone: "bitcoin" },
+  { symbol: "Ξ", label: "Ethereum", tone: "ethereum" },
+  { symbol: "₮", label: "Tether", tone: "tether" },
+  { symbol: "◎", label: "Solana", tone: "solana" },
+  { symbol: "BNB", label: "BNB", tone: "bnb" },
+  { symbol: "$", label: "USD Coin", tone: "usdc" },
+  { symbol: "XRP", label: "XRP", tone: "xrp" },
+];
+
 export function Hero() {
   return (
     <section className="hero" id="inicio">
@@ -31,14 +41,24 @@ export function Hero() {
         <HeroBackgroundVideo />
         <div className="hero__background-watermark" />
         <div className="hero__crypto-layer">
-          <span>₿</span>
-          <span>Ξ</span>
-          <span>₮</span>
+          {cryptoCoins.map((coin) => (
+            <span
+              className={`hero__crypto-coin hero__crypto-coin--${coin.tone}`}
+              key={coin.label}
+            >
+              <span className="hero__crypto-symbol">{coin.symbol}</span>
+            </span>
+          ))}
         </div>
       </div>
       <div className="hero__ambient" aria-hidden="true" />
       <div className="hero__grid u-container">
         <div className="hero__content">
+          <p className="hero__private-label">
+            Inteligencia privada{" "}
+            <span className="hero__private-divider" aria-hidden="true">◆</span>{" "}
+            Liquidación en cripto
+          </p>
           <div className="hero__status">
             <span className="hero__status-dot" aria-hidden="true" />
             Sistema de análisis activo
@@ -72,13 +92,24 @@ export function Hero() {
           <div className="hero__terminal">
             <div className="hero__terminal-bar">
               <div>
-                <p className="hero__terminal-kicker">SmartBetting Radar</p>
-                <p className="hero__terminal-title">Oportunidades en vivo</p>
+                <p className="hero__terminal-kicker">SmartBetting Private Desk</p>
+                <p className="hero__terminal-title">Oportunidades selectas</p>
               </div>
               <span className="hero__live">
                 <span className="hero__live-dot" aria-hidden="true" />
                 LIVE
               </span>
+            </div>
+            <div className="hero__vault">
+              <div>
+                <p className="hero__vault-label">Bóveda digital</p>
+                <p className="hero__vault-value">USDT · BTC · ETH</p>
+              </div>
+              <div className="hero__vault-coins" aria-hidden="true">
+                <span className="hero__vault-coin">₿</span>
+                <span className="hero__vault-coin">Ξ</span>
+                <span className="hero__vault-coin">₮</span>
+              </div>
             </div>
             <div className="hero__opportunities">
               {opportunities.map((opportunity) => (
