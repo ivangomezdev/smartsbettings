@@ -474,12 +474,14 @@
   .hero__background-video {
     object-fit: cover;
     object-position: center top;
+    opacity: var(--opacity-hero-video-mobile);
   }
 
   .hero__video-frame::after {
     background:
       radial-gradient(circle at 82% 18%, var(--color-gold-halo), transparent 30%),
-      linear-gradient(180deg, transparent 58%, var(--color-background) 100%);
+      linear-gradient(90deg, rgba(4, 7, 4, 0.72), rgba(4, 7, 4, 0.24)),
+      linear-gradient(180deg, rgba(4, 7, 4, 0.08), rgba(4, 7, 4, 0.46) 58%, var(--color-background) 100%);
   }
 
   .hero__video-play {
@@ -494,6 +496,11 @@
 
   .hero__private-label {
     max-width: 18rem;
+  }
+
+  .hero__title,
+  .hero__lead {
+    text-shadow: var(--shadow-text-hero);
   }
 }
 

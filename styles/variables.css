@@ -104,6 +104,7 @@
   --shadow-coin: inset 0 1px 0 rgba(255, 241, 184, 0.34), inset 0 -0.5rem 1.5rem rgba(0, 0, 0, 0.36), 0 1rem 3rem rgba(0, 0, 0, 0.38);
   --shadow-panel: 0 2rem 7rem rgba(0, 0, 0, 0.52);
   --shadow-text-primary: 0 0 2.5rem rgba(109, 255, 0, 0.3);
+  --shadow-text-hero: 0 0.25rem 2rem rgba(0, 0, 0, 0.84);
   --shadow-glass: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1.5rem 4rem rgba(0, 0, 0, 0.26);
   --shadow-glass-hover: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 2rem 5rem rgba(0, 0, 0, 0.38);
   --shadow-glass-glow: 0 0 5rem 2rem rgba(109, 255, 0, 0.38);
@@ -189,6 +190,7 @@
   --scale-pulse: 1.35;
   --ticker-distance: -50%;
   --opacity-logo: 0.32;
+  --opacity-hero-video-mobile: 0.58;
   --opacity-pulse: 0.4;
   --opacity-disabled: 0.3;
   --opacity-ambient: 0.42;
