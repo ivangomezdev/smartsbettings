@@ -34,8 +34,6 @@ export function HeroBackgroundVideo() {
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     );
-    const mobileViewport = window.matchMedia("(max-width: 575px)");
-
     if (!video) {
       return undefined;
     }
@@ -67,17 +65,6 @@ export function HeroBackgroundVideo() {
       }
     }
 
-    function handleViewportChange() {
-      video.poster = mobileViewport.matches
-        ? "/luxmobile-poster.webp"
-        : "/luxury-poster.webp";
-      video.load();
-      syncPlayback();
-    }
-
-    video.poster = mobileViewport.matches
-      ? "/luxmobile-poster.webp"
-      : "/luxury-poster.webp";
     syncPlayback();
     video.addEventListener("loadedmetadata", syncPlayback);
     video.addEventListener("canplay", syncPlayback);
@@ -88,7 +75,6 @@ export function HeroBackgroundVideo() {
     window.addEventListener("click", syncPlayback);
     document.addEventListener("visibilitychange", syncPlayback);
     reducedMotion.addEventListener("change", syncPlayback);
-    mobileViewport.addEventListener("change", handleViewportChange);
 
     return () => {
       video.removeEventListener("loadedmetadata", syncPlayback);
@@ -100,7 +86,6 @@ export function HeroBackgroundVideo() {
       window.removeEventListener("click", syncPlayback);
       document.removeEventListener("visibilitychange", syncPlayback);
       reducedMotion.removeEventListener("change", syncPlayback);
-      mobileViewport.removeEventListener("change", handleViewportChange);
       video.pause();
     };
   }, [startPlayback]);
@@ -116,22 +101,12 @@ export function HeroBackgroundVideo() {
           muted
           loop
           playsInline
-          poster="/luxury-poster.webp"
           preload="auto"
           disablePictureInPicture
           disableRemotePlayback
           tabIndex={-1}
         >
-          <source
-            src="/luxmobile-safari.mp4"
-            type="video/mp4"
-            media="(max-width: 575px)"
-          />
-          <source
-            src="/luxury-safari.mp4"
-            type="video/mp4"
-            media="(min-width: 576px)"
-          />
+          <source src="/imaflex.mp4" type="video/mp4" />
         </video>
       </div>
       {needsTap ? (

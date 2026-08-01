@@ -91,8 +91,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   filter: saturate(0.78) contrast(1.08);
-  opacity: 0.38;
-  transition: opacity var(--duration-fast) var(--ease-standard);
+  opacity: 1;
 }
 
 .how-it-works__step::after {
@@ -109,10 +108,6 @@
 .how-it-works__step:hover {
   border-color: var(--color-border-primary);
   transform: translateY(var(--offset-lift));
-}
-
-.how-it-works__step:hover::before {
-  opacity: 0.48;
 }
 
 .how-it-works__number {
