@@ -506,6 +506,18 @@
 }
 
 @media (max-width: 767px) {
+  .hero__terminal-bar {
+    background:
+      linear-gradient(90deg, rgba(4, 7, 4, 0.82), rgba(4, 7, 4, 0.34)),
+      url("/hero-terminal-mobile-bg.png") center / cover no-repeat;
+  }
+
+  .hero__terminal-kicker,
+  .hero__terminal-title {
+    color: var(--color-white);
+    text-shadow: var(--shadow-text-hero);
+  }
+
   .hero__visual {
     justify-self: center;
     min-width: var(--position-zero);
