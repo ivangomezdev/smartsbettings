@@ -3,6 +3,20 @@ import { PricingCard } from "../PricingCard/PricingCard";
 
 const plans = [
   {
+    eyebrow: "Para comenzar",
+    name: "Starter",
+    price: "19.99 USDT",
+    suffix: "/ mes",
+    description:
+      "Una entrada simple para quienes están comenzando en el mundo de las apuestas deportivas.",
+    features: [
+      "1 pick diario",
+      "5 días a la semana",
+      "Selección explicada paso a paso",
+      "Seguimiento de cada pick",
+    ],
+  },
+  {
     eyebrow: "Mensual",
     name: "Arbitraje",
     price: "30 USDT",
@@ -40,7 +54,7 @@ export function Pricing() {
         <SectionHeading
           eyebrow="Precios simples"
           title="Elige cómo quieres encontrar tu ventaja."
-          description="Dos modalidades claras, pago en USDT y sin costos escondidos."
+          description="Tres modalidades claras, pago en USDT y sin costos escondidos."
           align="center"
         />
         <div className="pricing__grid">
