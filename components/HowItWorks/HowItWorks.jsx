@@ -30,8 +30,8 @@ export function HowItWorks() {
 
   useEffect(() => {
     if (!("IntersectionObserver" in window)) {
-      setIsVisible(true);
-      return undefined;
+      const visibilityTimer = window.setTimeout(() => setIsVisible(true), 0);
+      return () => window.clearTimeout(visibilityTimer);
     }
 
     const observer = new IntersectionObserver(

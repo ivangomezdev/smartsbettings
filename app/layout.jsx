@@ -1,5 +1,6 @@
 import { Inter, Rajdhani } from "next/font/google";
 import { headers } from "next/headers";
+import { AuthLauncher } from "../components/AuthLauncher/AuthLauncher.jsx";
 import "../styles/globals.css";
 
 const headingFont = Rajdhani({
@@ -69,6 +70,7 @@ export default function RootLayout({ children }) {
     <html lang="es">
       <body className={`${headingFont.variable} ${bodyFont.variable}`}>
         {children}
+        <AuthLauncher />
       </body>
     </html>
   );
