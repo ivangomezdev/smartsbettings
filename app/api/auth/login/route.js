@@ -29,7 +29,18 @@ export async function POST(request) {
 
     const sql = await ensureSchema();
     const rows = await sql`
-      SELECT id, username, password_hash, selected_plan, failed_login_count, locked_until
+      SELECT
+        id,
+        username,
+        display_name,
+        email,
+        password_hash,
+        selected_plan,
+        plan_status,
+        plan_started_at,
+        plan_expires_at,
+        failed_login_count,
+        locked_until
       FROM sb_users
       WHERE username = ${username}
       LIMIT 1
@@ -76,7 +87,12 @@ export async function POST(request) {
       user: {
         id: user.id,
         username: user.username,
+        displayName: user.display_name,
+        email: user.email,
         selectedPlan: user.selected_plan,
+        planStatus: user.plan_status,
+        planStartedAt: user.plan_started_at,
+        planExpiresAt: user.plan_expires_at,
       },
     });
     attachSessionCookie(response, token);

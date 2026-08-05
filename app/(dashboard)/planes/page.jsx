@@ -1,4 +1,4 @@
-import { PlanSelector } from "../../components/PlanSelector/PlanSelector.jsx";
+import { PlanSelector } from "../../../components/PlanSelector/PlanSelector.jsx";
 
 export const metadata = {
   title: "Elige tu plan",

@@ -48,7 +48,18 @@ export async function POST(request) {
     }
 
     const token = await createSession(userId);
-    const response = json({ user: { id: userId, username, selectedPlan: null } }, 201);
+    const response = json({
+      user: {
+        id: userId,
+        username,
+        displayName: null,
+        email: null,
+        selectedPlan: null,
+        planStatus: "inactive",
+        planStartedAt: null,
+        planExpiresAt: null,
+      },
+    }, 201);
     attachSessionCookie(response, token);
     return response;
   } catch (error) {

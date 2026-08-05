@@ -1,13 +1,24 @@
 CREATE TABLE IF NOT EXISTS sb_users (
   id TEXT PRIMARY KEY,
   username VARCHAR(30) NOT NULL UNIQUE,
+  display_name VARCHAR(80),
+  email VARCHAR(254),
   password_hash TEXT NOT NULL,
   selected_plan VARCHAR(32),
+  plan_status VARCHAR(20) NOT NULL DEFAULT 'inactive',
+  plan_started_at TIMESTAMPTZ,
+  plan_expires_at TIMESTAMPTZ,
   failed_login_count INTEGER NOT NULL DEFAULT 0,
   locked_until TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+ALTER TABLE sb_users ADD COLUMN IF NOT EXISTS display_name VARCHAR(80);
+ALTER TABLE sb_users ADD COLUMN IF NOT EXISTS email VARCHAR(254);
+ALTER TABLE sb_users ADD COLUMN IF NOT EXISTS plan_status VARCHAR(20) NOT NULL DEFAULT 'inactive';
+ALTER TABLE sb_users ADD COLUMN IF NOT EXISTS plan_started_at TIMESTAMPTZ;
+ALTER TABLE sb_users ADD COLUMN IF NOT EXISTS plan_expires_at TIMESTAMPTZ;
 
 CREATE TABLE IF NOT EXISTS sb_sessions (
   token_hash CHAR(64) PRIMARY KEY,
@@ -16,5 +27,30 @@ CREATE TABLE IF NOT EXISTS sb_sessions (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS sb_predictions (
+  id TEXT PRIMARY KEY,
+  sport VARCHAR(60) NOT NULL,
+  league VARCHAR(100),
+  event_name VARCHAR(180) NOT NULL,
+  pick_text VARCHAR(220) NOT NULL,
+  bookmaker VARCHAR(100),
+  odds NUMERIC(8, 3),
+  analysis TEXT,
+  ticket_image_url TEXT,
+  bet_link TEXT,
+  starts_at TIMESTAMPTZ NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'published',
+  allowed_plans JSONB NOT NULL DEFAULT '["starter", "predicciones"]'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE sb_predictions ADD COLUMN IF NOT EXISTS bookmaker VARCHAR(100);
+ALTER TABLE sb_predictions ADD COLUMN IF NOT EXISTS ticket_image_url TEXT;
+ALTER TABLE sb_predictions ADD COLUMN IF NOT EXISTS bet_link TEXT;
+
+CREATE UNIQUE INDEX IF NOT EXISTS sb_users_email_unique_idx ON sb_users (LOWER(email)) WHERE email IS NOT NULL;
 CREATE INDEX IF NOT EXISTS sb_sessions_user_id_idx ON sb_sessions(user_id);
 CREATE INDEX IF NOT EXISTS sb_sessions_expires_at_idx ON sb_sessions(expires_at);
+CREATE INDEX IF NOT EXISTS sb_predictions_starts_at_idx ON sb_predictions(starts_at);
+CREATE INDEX IF NOT EXISTS sb_predictions_status_idx ON sb_predictions(status);

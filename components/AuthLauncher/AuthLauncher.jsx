@@ -38,7 +38,7 @@ export function AuthLauncher() {
     };
   }, [open]);
 
-  if (pathname === "/planes") {
+  if (["/planes", "/user", "/primeros-pasos", "/predictions"].includes(pathname) || pathname.startsWith("/admin")) {
     return null;
   }
 
@@ -48,7 +48,7 @@ export function AuthLauncher() {
     try {
       const response = await fetch("/api/auth/session", { cache: "no-store" });
       if (response.ok) {
-        router.push("/planes");
+        router.push("/user");
         return;
       }
     } catch {
@@ -83,7 +83,11 @@ export function AuthLauncher() {
       }
 
       setOpen(false);
-      router.push("/planes");
+      const requestedPath = new URLSearchParams(window.location.search).get("returnTo");
+      const safeRequestedPath = requestedPath && ["/user", "/primeros-pasos", "/predictions", "/planes"].includes(requestedPath)
+        ? requestedPath
+        : null;
+      router.push(mode === "register" ? "/planes" : safeRequestedPath || "/user");
     } catch {
       setError("No pudimos conectar con el servidor. Inténtalo nuevamente.");
     } finally {

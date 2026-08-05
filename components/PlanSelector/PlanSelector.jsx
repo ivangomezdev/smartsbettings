@@ -1,56 +1,24 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FiArrowLeft, FiCheck, FiCopy, FiLogOut, FiShield, FiX } from "react-icons/fi";
+import { FiCheck, FiCopy, FiShield, FiX } from "react-icons/fi";
 import QRCode from "qrcode";
 import { plans } from "../../lib/plans.js";
+import { useUserAccount } from "../UserShell/UserShell.jsx";
 
 const DEMO_NETWORK = "SMARTBETTING DEMO TESTNET";
 
 export function PlanSelector() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState("");
+  const { user, setUser } = useUserAccount();
   const [savingPlan, setSavingPlan] = useState("");
+  const [activatingPlan, setActivatingPlan] = useState(false);
   const [checkoutPlan, setCheckoutPlan] = useState(null);
   const [checkoutError, setCheckoutError] = useState("");
   const [qrCode, setQrCode] = useState("");
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    let active = true;
-
-    const loadSession = async () => {
-      try {
-        const response = await fetch("/api/auth/session", { cache: "no-store" });
-        const data = await response.json();
-
-        if (response.status === 401) {
-          router.replace("/?registro=1");
-          return;
-        }
-
-        if (!response.ok) {
-          throw new Error(data.error || "No pudimos cargar tu cuenta.");
-        }
-
-        if (active) setUser(data.user);
-      } catch (error) {
-        if (active) setLoadError(error.message);
-      } finally {
-        if (active) setLoading(false);
-      }
-    };
-
-    loadSession();
-    return () => {
-      active = false;
-    };
-  }, [router]);
 
   const demoWallet = useMemo(() => {
     if (!checkoutPlan || !user) return "";
@@ -107,7 +75,13 @@ export function PlanSelector() {
         throw new Error(data.error || "No pudimos guardar el plan.");
       }
 
-      setUser((current) => ({ ...current, selectedPlan: plan.id }));
+      setUser((current) => ({
+        ...current,
+        selectedPlan: plan.id,
+        planStatus: "pending",
+        planStartedAt: null,
+        planExpiresAt: null,
+      }));
       setQrCode("");
       setCheckoutPlan(plan);
     } catch (error) {
@@ -117,9 +91,38 @@ export function PlanSelector() {
     }
   };
 
-  const logout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" }).catch(() => null);
-    router.replace("/");
+  const openPlan = (plan) => {
+    const selected = user.selectedPlan === plan.id;
+    if (selected && user.planStatus === "pending") {
+      setQrCode("");
+      setCheckoutPlan(plan);
+      return;
+    }
+    if (!selected || user.planStatus !== "active") {
+      choosePlan(plan);
+    }
+  };
+
+  const activateDemoPlan = async () => {
+    setActivatingPlan(true);
+    setCheckoutError("");
+    try {
+      const response = await fetch("/api/account/plan", { method: "PATCH" });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "No pudimos activar el plan demo.");
+      setUser((current) => ({
+        ...current,
+        planStatus: "active",
+        planStartedAt: new Date().toISOString(),
+        planExpiresAt: data.plan.expiresAt,
+      }));
+      setCheckoutPlan(null);
+      router.push("/user");
+    } catch (error) {
+      setCheckoutError(error.message);
+    } finally {
+      setActivatingPlan(false);
+    }
   };
 
   const copyWallet = async () => {
@@ -132,47 +135,16 @@ export function PlanSelector() {
     }
   };
 
-  if (loading) {
-    return (
-      <main className="plans-page plans-page--status">
-        <span className="plans-page__loader" aria-hidden="true" />
-        <p>Cargando tu cuenta…</p>
-      </main>
-    );
-  }
-
-  if (loadError) {
-    return (
-      <main className="plans-page plans-page--status">
-        <p className="plans-page__status-label">NO PUDIMOS ABRIR TU CUENTA</p>
-        <h1>Falta conectar la base de datos</h1>
-        <p>{loadError}</p>
-        <Link className="plans-page__home-link" href="/">Volver al inicio</Link>
-      </main>
-    );
-  }
-
-  if (!user) return null;
-
   return (
     <main className="plans-page">
-      <header className="plans-page__header">
-        <Link className="plans-page__back" href="/">
-          <FiArrowLeft aria-hidden="true" />
-          Inicio
-        </Link>
-        <div className="plans-page__brand">SMART<span>BETTING</span></div>
-        <button className="plans-page__logout" type="button" onClick={logout}>
-          <span>@{user.username}</span>
-          <FiLogOut aria-label="Cerrar sesión" />
-        </button>
-      </header>
-
       <section className="plans-page__content">
         <p className="plans-page__eyebrow">CONFIGURA TU ACCESO</p>
         <h1>Elige el plan que moverá tu estrategia.</h1>
         <p className="plans-page__intro">
           Tu selección se guardará en la cuenta. En esta etapa, el checkout es una demostración y no procesa pagos.
+        </p>
+        <p className="plans-page__access-note">
+          Starter y Predicciones incluyen acceso a picks. Arbitraje incluye únicamente oportunidades de surebet.
         </p>
 
         {checkoutError ? <p className="plans-page__error" role="alert">{checkoutError}</p> : null}
@@ -180,6 +152,7 @@ export function PlanSelector() {
         <div className="plans-page__grid">
           {plans.map((plan) => {
             const selected = user.selectedPlan === plan.id;
+            const active = selected && user.planStatus === "active";
             return (
               <article
                 className={`plan-option${plan.featured ? " plan-option--featured" : ""}${selected ? " is-selected" : ""}`}
@@ -201,10 +174,16 @@ export function PlanSelector() {
                 </ul>
                 <button
                   type="button"
-                  onClick={() => choosePlan(plan)}
-                  disabled={savingPlan === plan.id}
+                  onClick={() => openPlan(plan)}
+                  disabled={savingPlan === plan.id || active}
                 >
-                  {savingPlan === plan.id ? "Preparando…" : selected ? "Ver checkout demo" : "Elegir este plan"}
+                  {savingPlan === plan.id
+                    ? "Preparando…"
+                    : active
+                      ? "Plan activo"
+                      : selected && user.planStatus === "pending"
+                        ? "Completar pago demo"
+                        : "Elegir este plan"}
                 </button>
               </article>
             );
@@ -270,8 +249,9 @@ export function PlanSelector() {
               </dl>
             </div>
             <p className="checkout-modal__description">{checkoutPlan.description}</p>
-            <button className="checkout-modal__done" type="button" onClick={() => setCheckoutPlan(null)}>
-              Entendido, esto es una demostración
+            {checkoutError ? <p className="checkout-modal__error" role="alert">{checkoutError}</p> : null}
+            <button className="checkout-modal__done" type="button" onClick={activateDemoPlan} disabled={activatingPlan}>
+              {activatingPlan ? "Activando…" : "Confirmar pago demo y activar 30 días"}
             </button>
           </section>
         </div>

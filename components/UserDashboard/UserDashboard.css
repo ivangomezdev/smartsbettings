@@ -1,0 +1,243 @@
+.user-dashboard {
+  margin: 0 auto;
+  max-width: 88rem;
+  padding: 2rem 1rem 4rem;
+}
+
+.user-dashboard__hero {
+  align-items: flex-end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: space-between;
+}
+
+.user-dashboard__hero p,
+.user-dashboard__plan p {
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-label);
+}
+
+.user-dashboard__hero h1 {
+  font-size: clamp(2.5rem, 8vw, 4.8rem);
+  letter-spacing: var(--letter-spacing-hero);
+  margin-top: 0.35rem;
+}
+
+.user-dashboard__hero span,
+.user-dashboard__plan span {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
+.user-dashboard__hero > a,
+.user-dashboard__plan > a {
+  align-items: center;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink);
+  display: flex;
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  gap: 0.45rem;
+  letter-spacing: var(--letter-spacing-wide);
+  padding: 0.78rem 1.05rem;
+  text-transform: uppercase;
+}
+
+.user-dashboard__stats {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.user-dashboard__stats article {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--color-border);
+  border-radius: 0.9rem;
+  display: flex;
+  gap: 0.8rem;
+  min-height: 5.3rem;
+  padding: 0.9rem;
+}
+
+.user-dashboard__stat-icon,
+.account-panel__heading > span {
+  align-items: center;
+  background: rgba(109, 255, 0, 0.08);
+  border: 1px solid rgba(109, 255, 0, 0.15);
+  border-radius: 0.7rem;
+  color: var(--color-primary);
+  display: flex;
+  flex: 0 0 2.65rem;
+  font-size: 1.1rem;
+  height: 2.65rem;
+  justify-content: center;
+}
+
+.user-dashboard__stat-icon.is-active {
+  box-shadow: 0 0 1.5rem rgba(109, 255, 0, 0.14);
+}
+
+.user-dashboard__stats article div {
+  display: grid;
+  gap: 0.16rem;
+}
+
+.user-dashboard__stats small {
+  color: var(--color-text-subtle);
+  font-size: 0.58rem;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.user-dashboard__stats strong {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+}
+
+.user-dashboard__plan {
+  align-items: center;
+  background:
+    radial-gradient(circle at 90% 10%, rgba(109, 255, 0, 0.16), transparent 17rem),
+    var(--gradient-panel);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-top: 0.75rem;
+  padding: 1.25rem;
+}
+
+.user-dashboard__plan h2 {
+  font-size: 1.7rem;
+  margin: 0.3rem 0;
+}
+
+.user-dashboard__forms {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.account-panel {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  padding: 1.1rem;
+}
+
+.account-panel__heading {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.account-panel__heading h2 {
+  font-size: 1.25rem;
+}
+
+.account-panel__heading p {
+  color: var(--color-text-subtle);
+  font-size: 0.7rem;
+  margin-top: 0.2rem;
+}
+
+.account-panel form {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.2rem;
+}
+
+.account-panel label {
+  color: var(--color-text-muted);
+  display: grid;
+  font-size: 0.66rem;
+  font-weight: 600;
+  gap: 0.38rem;
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.account-field {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.7rem;
+  color: var(--color-text-subtle);
+  display: flex;
+  gap: 0.55rem;
+  min-height: 2.9rem;
+  padding: 0 0.8rem;
+}
+
+.account-field:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(109, 255, 0, 0.08);
+}
+
+.account-field input {
+  background: transparent;
+  border: 0;
+  color: var(--color-text);
+  min-width: 0;
+  outline: 0;
+  width: 100%;
+}
+
+.account-panel form > button {
+  background: var(--gradient-primary);
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: var(--color-ink);
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-wide);
+  min-height: 2.9rem;
+  text-transform: uppercase;
+}
+
+.account-panel form > button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.account-message {
+  border-radius: 0.6rem;
+  font-size: 0.7rem;
+  padding: 0.65rem;
+}
+
+.account-message--success {
+  background: rgba(109, 255, 0, 0.07);
+  color: var(--color-primary-bright);
+}
+
+.account-message--error {
+  background: rgba(255, 80, 80, 0.08);
+  color: #ffb0b0;
+}
+
+@media (min-width: 620px) {
+  .user-dashboard__stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  .user-dashboard {
+    padding: 3rem 2.5rem 5rem;
+  }
+
+  .user-dashboard__forms {
+    grid-template-columns: 1fr 1fr;
+  }
+}

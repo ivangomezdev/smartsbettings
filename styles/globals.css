@@ -21,3 +21,8 @@
 @import "../components/Footer/Footer.css";
 @import "../components/AuthLauncher/AuthLauncher.css";
 @import "../components/PlanSelector/PlanSelector.css";
+@import "../components/UserShell/UserShell.css";
+@import "../components/UserDashboard/UserDashboard.css";
+@import "../components/PredictionsFeed/PredictionsFeed.css";
+@import "../components/AdminPanel/AdminPanel.css";
+@import "../components/GettingStarted/GettingStarted.css";

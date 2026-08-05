@@ -29,7 +29,7 @@ const faqs = [
   {
     question: "¿Ya puedo crear mi cuenta?",
     answer:
-      "La landing es la primera fase de SmartBetting. El registro, los perfiles y los paneles de usuario y administración se integrarán en la siguiente etapa.",
+      "Sí. Desde mobile puedes crear tu cuenta, elegir un plan y entrar a tu dashboard para administrar tus datos y consultar los picks incluidos en tu acceso.",
   },
 ];
 
