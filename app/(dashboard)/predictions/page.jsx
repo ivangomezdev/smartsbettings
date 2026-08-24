@@ -1,11 +1,12 @@
-import { PredictionsFeed } from "../../../components/PredictionsFeed/PredictionsFeed.jsx";
+import { Suspense } from "react";
+import { PredictionsHub } from "../../../components/PredictionsHub/PredictionsHub.jsx";
 
 export const metadata = {
   title: "Predicciones",
-  description: "Picks disponibles para tu plan de SmartBetting.",
+  description: "Chat de análisis y picks disponibles para tu plan de SmartBetting.",
   robots: { index: false, follow: false },
 };
 
 export default function PredictionsPage() {
-  return <PredictionsFeed />;
+  return <Suspense fallback={<main className="predictions-hub"><p>Cargando Predictions…</p></main>}><PredictionsHub /></Suspense>;
 }

@@ -2,6 +2,10 @@ import { json, handleApiError } from "../../../lib/api.js";
 import { getSessionUser, hasActivePlan } from "../../../lib/auth.js";
 import { ensureSchema } from "../../../lib/db.js";
 import { getPlanById } from "../../../lib/plans.js";
+import { isSameOrigin } from "../../../lib/auth.js";
+import { validatePredictionRequest } from "../../../lib/predictions/contracts.js";
+import { toPublicPredictionError } from "../../../lib/predictions/errors.js";
+import { createPredictionChatService } from "../../../services/predictions/predictionChatService.js";
 
 export async function GET(request) {
   try {
@@ -53,3 +57,35 @@ export async function GET(request) {
     return handleApiError(error);
   }
 }
+
+export function createPredictionsPostHandler({
+  chatService = createPredictionChatService(),
+  getUser = getSessionUser,
+  getPlan = getPlanById,
+  userHasActivePlan = hasActivePlan,
+  sameOrigin = isSameOrigin,
+  validateRequest = validatePredictionRequest,
+} = {}) {
+  return async function post(request) {
+    const requestId = request.headers.get("idempotency-key") || randomUUID();
+    try {
+      if (!sameOrigin(request)) return json({ error: "Origen de solicitud no permitido.", code: "INVALID_ORIGIN" }, 403);
+      const user = await getUser(request);
+      if (!user) return json({ error: "Inicia sesión para analizar partidos.", code: "AUTH_REQUIRED" }, 401);
+      const plan = getPlan(user.selectedPlan);
+      if (!plan || !userHasActivePlan(user) || !plan.includesPredictions) return json({ error: "Necesitas un plan activo que incluya predicciones.", code: "PLAN_REQUIRED", redirectTo: "/planes?required=predictions" }, 402);
+      if (!/^[a-zA-Z0-9_-]{1,180}$/.test(requestId)) return json({ error: "El identificador de solicitud no es válido.", code: "INVALID_REQUEST_ID" }, 400);
+      let body;
+      try { body = await request.json(); } catch { return json({ error: "El cuerpo JSON no es válido.", code: "INVALID_PREDICTION_REQUEST" }, 400); }
+      const input = validateRequest(body);
+      const result = await chatService.process({ userId: user.id, ...input, requestId });
+      return json(result);
+    } catch (error) {
+      const publicError = toPublicPredictionError(error);
+      return json({ ...publicError, requestId }, error.status || 500);
+    }
+  };
+}
+
+export const POST = createPredictionsPostHandler();
+import { randomUUID } from "node:crypto";

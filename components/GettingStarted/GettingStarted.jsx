@@ -94,7 +94,7 @@ export function GettingStarted() {
             <span>
               Entra a Predicciones y revisa el evento, la apuesta sugerida, la cuota, el análisis y la captura del ticket antes de continuar.
             </span>
-            <Link href="/predictions">Ver picks disponibles <FiArrowRight aria-hidden="true" /></Link>
+            <Link href="/predictions?view=picks">Ver picks disponibles <FiArrowRight aria-hidden="true" /></Link>
           </div>
         </article>
 

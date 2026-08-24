@@ -10,7 +10,19 @@
     "build": "vinext build",
     "build:vercel": "next build",
     "start": "vinext start",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "test": "node --test tests/predictions/*.test.js",
+    "verify:predictions": "node --env-file-if-exists=.env.local scripts/verify-predictions-foundation.js",
+    "verify:predictions:phase3": "node --env-file-if-exists=.env.local scripts/verify-predictions-phase3.js",
+    "verify:predictions:llm": "node --env-file-if-exists=.env.local scripts/verify-openai-structured-output.js",
+    "predictions:import:football-data": "node --env-file-if-exists=.env.local scripts/import-football-data.js",
+    "predictions:backtest": "node --env-file-if-exists=.env.local scripts/backtest-predictions.js",
+    "predictions:dedupe-backtests": "node --env-file-if-exists=.env.local scripts/deduplicate-backtest-runs.js",
+    "predictions:benchmark:v1": "node --env-file-if-exists=.env.local scripts/benchmark-poisson-v1.js",
+    "predictions:benchmark:v1:report": "node --env-file-if-exists=.env.local scripts/report-benchmark-v1.js",
+    "predictions:benchmark:v2": "node --env-file-if-exists=.env.local scripts/benchmark-poisson-v2.js",
+    "predictions:research": "node --env-file-if-exists=.env.local scripts/research-predictions.js",
+    "predictions:thesportsdb": "node --env-file-if-exists=.env.local scripts/verify-thesportsdb.js"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

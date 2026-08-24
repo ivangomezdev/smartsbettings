@@ -24,5 +24,7 @@
 @import "../components/UserShell/UserShell.css";
 @import "../components/UserDashboard/UserDashboard.css";
 @import "../components/PredictionsFeed/PredictionsFeed.css";
+@import "../components/PredictionsHub/PredictionsHub.css";
+@import "../components/PredictionResult/PredictionResult.css";
 @import "../components/AdminPanel/AdminPanel.css";
 @import "../components/GettingStarted/GettingStarted.css";
