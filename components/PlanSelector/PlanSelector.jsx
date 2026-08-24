@@ -43,7 +43,7 @@ export function PlanSelector() {
     QRCode.toDataURL(`smartbetting-demo://checkout?${payload.toString()}`, {
       width: 420,
       margin: 2,
-      color: { dark: "#071003", light: "#ffffff" },
+      color: { dark: "#8dff4d", light: "#00000000" },
       errorCorrectionLevel: "M",
     }).then((dataUrl) => {
       if (active) setQrCode(dataUrl);

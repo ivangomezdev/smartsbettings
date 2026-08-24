@@ -386,9 +386,9 @@
 
 .checkout-modal__qr {
   align-items: center;
-  background: #fff;
+  background: transparent;
   border-radius: 0.8rem;
-  color: #071003;
+  color: var(--color-primary);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -398,13 +398,15 @@
 }
 
 .checkout-modal__qr img {
+  filter: drop-shadow(0 0 1rem rgba(141, 255, 77, 0.16));
   height: auto;
   max-width: 13rem;
   width: 100%;
 }
 
 .checkout-modal__qr small {
-  background: #071003;
+  background: rgba(141, 255, 77, 0.08);
+  border: 1px solid rgba(141, 255, 77, 0.2);
   border-radius: var(--radius-pill);
   color: var(--color-primary);
   font-size: 0.58rem;

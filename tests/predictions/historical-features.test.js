@@ -21,17 +21,17 @@ test("deja ambiguo un alias que coincide con más de un nombre canónico aplicab
 });
 
 test("genera targets binarios correctos", () => {
-  assert.deepEqual(buildTargets({ homeGoals: 2, awayGoals: 1 }), {
-    over_0_5: 1,
-    over_1_5: 1,
-    over_2_5: 1,
-    under_1_5: 0,
-    under_2_5: 0,
-    btts: 1,
-    home_win: 1,
-    draw: 0,
-    away_win: 0,
-  });
+  const targets = buildTargets({ homeGoals: 2, awayGoals: 1, homeCorners: 6, awayCorners: 4, homeCards: 2, awayCards: 3 });
+  assert.equal(targets.over_3_5, 0);
+  assert.equal(targets.under_3_5, 1);
+  assert.equal(targets.btts, 1);
+  assert.equal(targets.btts_no, 0);
+  assert.equal(targets.double_chance_1x, 1);
+  assert.equal(targets.draw_no_bet_home, 1);
+  assert.equal(targets.home_over_1_5, 1);
+  assert.equal(targets.away_under_1_5, 1);
+  assert.equal(targets.cards_over_4_5, 1);
+  assert.equal(targets.corners_over_9_5, 1);
 });
 
 test("ordena cronológicamente y termina todas las ventanas estrictamente antes del partido", () => {

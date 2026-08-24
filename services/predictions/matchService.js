@@ -15,14 +15,23 @@ import { mergeProviderUsage } from "./providers/sportsProviderRouter.js";
 const FINISHED_OR_INVALID = new Set(["FT", "AET", "PEN", "CANC", "ABD", "AWD", "WO"]);
 const MAX_RECENT_DETAILS_PER_TEAM = 5;
 const MAX_THESPORTSDB_DETAILS_PER_TEAM = 3;
+const MIN_EXPLANATION_RECENT_MATCHES = 6;
+const TEAM_SEARCH_ALIASES = Object.freeze({
+  "dep la coruna": "Deportivo de A Coruña",
+  "dep de la coruna": "Deportivo de A Coruña",
+  "deportivo la coruna": "Deportivo de A Coruña",
+  "deportivo de la coruna": "Deportivo de A Coruña",
+  "deportivo a coruna": "Deportivo de A Coruña",
+  "deportivo coruna": "Deportivo de A Coruña",
+});
 
-function teamOption(item) {
+function teamOption(item, responseProvider = null) {
   return {
     id: item?.team?.id ?? null,
     name: item?.team?.name ?? null,
     country: item?.team?.country ?? null,
     logo: item?.team?.logo ?? null,
-    provider: item?.team?.provider ?? null,
+    provider: item?.team?.provider ?? responseProvider,
     providerIds: item?.team?.providerIds ?? null,
     provenance: item?.team?.provenance ?? null,
   };
@@ -101,15 +110,18 @@ export function createMatchService({ sportsApi } = {}) {
   if (!sportsApi) throw new Error("createMatchService requiere sportsApi.");
 
   async function resolveTeam(requestedName, side, forcedId = null) {
-    const response = await sportsApi.searchTeams(requestedName);
+    const normalizedRequested = normalizeSearchText(requestedName).trim();
+    const searchName = TEAM_SEARCH_ALIASES[normalizedRequested] || requestedName;
+    const response = await sportsApi.searchTeams(searchName);
+    const responseProvider = response.meta?.provider || null;
     if (forcedId != null) {
       const selected = (response.data || []).find((item) => String(item?.team?.id) === String(forcedId));
-      if (selected) return { kind: "resolved", team: teamOption(selected), source: providerMeta(response) };
+      if (selected) return { kind: "resolved", team: teamOption(selected, responseProvider), source: providerMeta(response) };
     }
-    const exact = exactTeamMatches(response.data, requestedName);
-    if (exact.length === 1) return { kind: "resolved", team: teamOption(exact[0]), source: providerMeta(response) };
+    const exact = exactTeamMatches(response.data, searchName);
+    if (exact.length === 1) return { kind: "resolved", team: teamOption(exact[0], responseProvider), source: providerMeta(response) };
 
-    const candidates = (exact.length ? exact : response.data || []).slice(0, 8).map(teamOption);
+    const candidates = (exact.length ? exact : response.data || []).slice(0, 8).map((item) => teamOption(item, responseProvider));
     return {
       kind: candidates.length ? "clarification" : "not_found",
       reason: candidates.length ? `${side}_team_ambiguous` : `${side}_team_not_found`,
@@ -259,6 +271,19 @@ export function createMatchService({ sportsApi } = {}) {
       }
     }
 
+    async function optionalFallback(section, request) {
+      try {
+        const result = await request();
+        addUsage(result);
+        sources[section] = providerMeta(result);
+        return result.data ?? null;
+      } catch (error) {
+        if (!(error instanceof PredictionFoundationError)) throw error;
+        sources[section] = { provider: "api-football", error: error.code, retryable: error.retryable };
+        return null;
+      }
+    }
+
     const coverageItems = selectedProvider === "thesportsdb" ? [] : await optional(
       "coverage",
       () => sportsApi.getResource("leagues", { id: leagueId, season }, selectedProvider ? { provider: selectedProvider } : {}),
@@ -269,25 +294,81 @@ export function createMatchService({ sportsApi } = {}) {
       missingData.push({ section: "coverage", reason: "coverage_not_available" });
     }
 
-    const [homeRecentRaw, awayRecentRaw] = await Promise.all([
+    const configuredApiFootballFallback = selectedProvider === "thesportsdb" && sportsApi.fallbackProviderName === "api-football";
+    const mappedApiFootballEventId = fixture.providerIds?.apiFootball?.eventId
+      || fixture.fixture?.providerIds?.apiFootball?.eventId
+      || resolution.providerIds?.apiFootball?.eventId
+      || null;
+    const fallbackFixtureRaw = configuredApiFootballFallback && mappedApiFootballEventId
+      ? await optionalFallback(
+          "apiFootballFixtureMapping",
+          () => sportsApi.getResource("fixtures", { id: mappedApiFootballEventId }, { provider: "api-football" }),
+        )
+      : null;
+    const fallbackFixture = asArray(fallbackFixtureRaw)[0] || null;
+    const fallbackIds = {
+      fixture: fallbackFixture?.fixture?.id || mappedApiFootballEventId || null,
+      league: fallbackFixture?.league?.id || null,
+      season: fallbackFixture?.league?.season || null,
+      home: fallbackFixture?.teams?.home?.id || resolution.teams.home?.providerIds?.apiFootball?.teamId || null,
+      away: fallbackFixture?.teams?.away?.id || resolution.teams.away?.providerIds?.apiFootball?.teamId || null,
+    };
+
+    let [homeRecentRaw, awayRecentRaw] = await Promise.all([
       optional("homeRecentForm", () => sportsApi.getResource("fixtures", { team: homeId, last: 10, status: "FT-AET-PEN" }, { recentForm: true, ...(selectedProvider ? { provider: selectedProvider } : {}) })),
       optional("awayRecentForm", () => sportsApi.getResource("fixtures", { team: awayId, last: 10, status: "FT-AET-PEN" }, { recentForm: true, ...(selectedProvider ? { provider: selectedProvider } : {}) })),
     ]);
-    const [homeSeasonRaw, awaySeasonRaw] = capabilities.seasonStatistics === false
+    const fallbackRecentIds = new Set();
+    let homeRecentTeamId = homeId;
+    let awayRecentTeamId = awayId;
+    if (configuredApiFootballFallback && normalizeRecentForm(asArray(homeRecentRaw), homeId).sampleSize < MIN_EXPLANATION_RECENT_MATCHES && fallbackIds.home) {
+      const candidate = await optionalFallback(
+        "homeRecentFormFallback",
+        () => sportsApi.getResource("fixtures", { team: fallbackIds.home, last: 10, status: "FT-AET-PEN" }, { recentForm: true, provider: "api-football" }),
+      );
+      if (normalizeRecentForm(asArray(candidate), fallbackIds.home).sampleSize > normalizeRecentForm(asArray(homeRecentRaw), homeId).sampleSize) {
+        homeRecentRaw = candidate;
+        homeRecentTeamId = fallbackIds.home;
+        for (const item of asArray(candidate)) if (item?.fixture?.id != null) fallbackRecentIds.add(String(item.fixture.id));
+      }
+    }
+    if (configuredApiFootballFallback && normalizeRecentForm(asArray(awayRecentRaw), awayId).sampleSize < MIN_EXPLANATION_RECENT_MATCHES && fallbackIds.away) {
+      const candidate = await optionalFallback(
+        "awayRecentFormFallback",
+        () => sportsApi.getResource("fixtures", { team: fallbackIds.away, last: 10, status: "FT-AET-PEN" }, { recentForm: true, provider: "api-football" }),
+      );
+      if (normalizeRecentForm(asArray(candidate), fallbackIds.away).sampleSize > normalizeRecentForm(asArray(awayRecentRaw), awayId).sampleSize) {
+        awayRecentRaw = candidate;
+        awayRecentTeamId = fallbackIds.away;
+        for (const item of asArray(candidate)) if (item?.fixture?.id != null) fallbackRecentIds.add(String(item.fixture.id));
+      }
+    }
+    const canFallbackSeason = configuredApiFootballFallback && fallbackIds.league && fallbackIds.season && fallbackIds.home && fallbackIds.away;
+    const [homeSeasonRaw, awaySeasonRaw] = capabilities.seasonStatistics === false && !canFallbackSeason
       ? (missingData.push(
-          { section: "homeSeasonStatistics", reason: "provider_not_supported" },
-          { section: "awaySeasonStatistics", reason: "provider_not_supported" },
+          { section: "homeSeasonStatistics", reason: "provider_and_fallback_not_supported" },
+          { section: "awaySeasonStatistics", reason: "provider_and_fallback_not_supported" },
         ), [null, null])
       : await Promise.all([
-          optional("homeSeasonStatistics", () => sportsApi.getResource("teams/statistics", { league: leagueId, season, team: homeId, date: eventDate }, selectedProvider ? { provider: selectedProvider } : {})),
-          optional("awaySeasonStatistics", () => sportsApi.getResource("teams/statistics", { league: leagueId, season, team: awayId, date: eventDate }, selectedProvider ? { provider: selectedProvider } : {})),
+          optional("homeSeasonStatistics", () => sportsApi.getResource("teams/statistics", {
+            league: canFallbackSeason ? fallbackIds.league : leagueId,
+            season: canFallbackSeason ? fallbackIds.season : season,
+            team: canFallbackSeason ? fallbackIds.home : homeId,
+            date: eventDate,
+          }, canFallbackSeason ? { provider: "api-football" } : selectedProvider ? { provider: selectedProvider } : {})),
+          optional("awaySeasonStatistics", () => sportsApi.getResource("teams/statistics", {
+            league: canFallbackSeason ? fallbackIds.league : leagueId,
+            season: canFallbackSeason ? fallbackIds.season : season,
+            team: canFallbackSeason ? fallbackIds.away : awayId,
+            date: eventDate,
+          }, canFallbackSeason ? { provider: "api-football" } : selectedProvider ? { provider: selectedProvider } : {})),
         ]);
     let h2hRaw = await optional(
       "h2h",
       () => sportsApi.getResource("fixtures/headtohead", { h2h: `${homeId}-${awayId}`, last: 5 }, selectedProvider ? { provider: selectedProvider } : {}),
     );
-    const apiFootballHomeId = resolution.teams.home?.providerIds?.apiFootball?.teamId;
-    const apiFootballAwayId = resolution.teams.away?.providerIds?.apiFootball?.teamId;
+    const apiFootballHomeId = fallbackIds.home;
+    const apiFootballAwayId = fallbackIds.away;
     if (
       selectedProvider === "thesportsdb"
       && responseIsEmpty(h2hRaw)
@@ -295,10 +376,9 @@ export function createMatchService({ sportsApi } = {}) {
       && apiFootballHomeId
       && apiFootballAwayId
     ) {
-      const fallbackH2h = await optional(
+      const fallbackH2h = await optionalFallback(
         "h2hFallback",
         () => sportsApi.getResource("fixtures/headtohead", { h2h: `${apiFootballHomeId}-${apiFootballAwayId}`, last: 5 }, { provider: "api-football" }),
-        "fallback_not_available",
       );
       if (!responseIsEmpty(fallbackH2h)) {
         h2hRaw = fallbackH2h;
@@ -318,7 +398,7 @@ export function createMatchService({ sportsApi } = {}) {
     const detailedRaw = recentIds.length
       ? selectedProvider === "thesportsdb"
         ? await optional("matchStatistics", async () => {
-            const results = await Promise.all(recentFixtures.filter((item, index, all) => all.findIndex((candidate) => candidate.fixture?.id === item.fixture?.id) === index).map(async (item) => {
+            const results = await Promise.all(recentFixtures.filter((item, index, all) => !fallbackRecentIds.has(String(item.fixture?.id)) && all.findIndex((candidate) => candidate.fixture?.id === item.fixture?.id) === index).map(async (item) => {
               const result = await sportsApi.getResource("fixtures/statistics", {
                 fixture: item.fixture.id,
                 homeTeamId: item.teams.home.id,
@@ -343,22 +423,25 @@ export function createMatchService({ sportsApi } = {}) {
           )
       : (missingData.push({ section: "matchStatistics", reason: "recent_fixtures_unavailable" }), []);
 
-    const injuriesEnabled = selectedProvider === "thesportsdb" ? capabilities.injuries === true : Boolean(coverage?.injuries);
-    const lineupsEnabled = selectedProvider === "thesportsdb" ? capabilities.eventLineups === true : Boolean(coverage?.fixtures?.lineups);
-    const oddsEnabled = selectedProvider === "thesportsdb" ? capabilities.odds === true : Boolean(coverage?.odds);
+    const injuriesFallback = selectedProvider === "thesportsdb" && capabilities.injuries !== true && configuredApiFootballFallback && fallbackIds.fixture;
+    const lineupsFallback = selectedProvider === "thesportsdb" && capabilities.eventLineups !== true && configuredApiFootballFallback && fallbackIds.fixture;
+    const oddsFallback = selectedProvider === "thesportsdb" && capabilities.odds !== true && configuredApiFootballFallback && fallbackIds.fixture;
+    const injuriesEnabled = selectedProvider === "thesportsdb" ? capabilities.injuries === true || injuriesFallback : Boolean(coverage?.injuries);
+    const lineupsEnabled = selectedProvider === "thesportsdb" ? capabilities.eventLineups === true || lineupsFallback : Boolean(coverage?.fixtures?.lineups);
+    const oddsEnabled = selectedProvider === "thesportsdb" ? capabilities.odds === true || oddsFallback : Boolean(coverage?.odds);
     const untilKickoff = timeUntilFixture(fixture);
     const withinDay = untilKickoff !== null && untilKickoff <= 24 * 60 * 60 * 1000;
     const nearKickoff = untilKickoff !== null && untilKickoff <= 90 * 60 * 1000;
     const withinOddsWindow = untilKickoff !== null && untilKickoff <= 7 * 24 * 60 * 60 * 1000;
 
     const injuriesRaw = injuriesEnabled
-      ? await optional("injuries", () => sportsApi.getResource("injuries", { fixture: fixtureId }, selectedProvider ? { provider: selectedProvider } : {}))
+      ? await optional("injuries", () => sportsApi.getResource("injuries", { fixture: injuriesFallback ? fallbackIds.fixture : fixtureId }, injuriesFallback ? { provider: "api-football" } : selectedProvider ? { provider: selectedProvider } : {}))
       : (missingData.push({ section: "injuries", reason: selectedProvider === "thesportsdb" ? "provider_not_supported" : "coverage_disabled" }), []);
     const lineupsRaw = lineupsEnabled && withinDay
-      ? await optional("lineups", () => sportsApi.getResource("fixtures/lineups", { fixture: fixtureId }, { nearKickoff, ...(selectedProvider ? { provider: selectedProvider } : {}) }))
+      ? await optional("lineups", () => sportsApi.getResource("fixtures/lineups", { fixture: lineupsFallback ? fallbackIds.fixture : fixtureId }, { nearKickoff, provider: lineupsFallback ? "api-football" : selectedProvider }))
       : (missingData.push({ section: "lineups", reason: lineupsEnabled ? "not_yet_available" : "coverage_disabled" }), []);
     const oddsRaw = oddsEnabled && withinOddsWindow
-      ? await optional("odds", () => sportsApi.getResource("odds", { fixture: fixtureId }, selectedProvider ? { provider: selectedProvider } : {}))
+      ? await optional("odds", () => sportsApi.getResource("odds", { fixture: oddsFallback ? fallbackIds.fixture : fixtureId }, oddsFallback ? { provider: "api-football" } : selectedProvider ? { provider: selectedProvider } : {}))
       : (missingData.push({ section: "odds", reason: oddsEnabled ? "outside_provider_window" : selectedProvider === "thesportsdb" ? "provider_not_supported" : "coverage_disabled" }), []);
 
     if (selectedProvider === "thesportsdb" && recentIds.length && asArray(detailedRaw).length < recentIds.length) {
@@ -382,13 +465,13 @@ export function createMatchService({ sportsApi } = {}) {
           lineups: asArray(lineupsRaw).length > 0,
           timeline: asArray(timelineRaw).length > 0,
         },
-        injuries: false,
-        odds: false,
+        injuries: asArray(injuriesRaw).length > 0,
+        odds: asArray(oddsRaw).length > 0,
       };
     }
 
-    const homeRecent = normalizeRecentForm(asArray(homeRecentRaw), homeId);
-    const awayRecent = normalizeRecentForm(asArray(awayRecentRaw), awayId);
+    const homeRecent = normalizeRecentForm(asArray(homeRecentRaw), homeRecentTeamId);
+    const awayRecent = normalizeRecentForm(asArray(awayRecentRaw), awayRecentTeamId);
 
     return {
       event: normalizeFixture(fixture),

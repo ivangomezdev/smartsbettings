@@ -39,11 +39,12 @@ function selectionFromClarification(parsed, clarification, selection) {
   return resumed;
 }
 
-function clarificationText(reason, language) {
+function clarificationText(reason, language, optionsCount = 0) {
   const english = language === "en";
   if (reason === "market_missing") return english ? "Which market would you like to analyze?" : "¿Qué mercado quieres analizar?";
   if (reason.includes("team_ambiguous")) return english ? "Which team did you mean?" : "¿A cuál equipo te refieres?";
-  if (reason.includes("fixture")) return english ? "Which fixture should I analyze?" : "¿Cuál de estos partidos quieres analizar?";
+  if (reason === "fixture_not_found") return english ? "I couldn't find that fixture in the requested date range. Add a date or check the home/away order." : "No encontré ese partido en el rango de fechas solicitado. Añade una fecha o revisa el orden local/visitante.";
+  if (reason.includes("fixture") && optionsCount > 0) return english ? "Which fixture should I analyze?" : "¿Cuál de estos partidos quieres analizar?";
   return english ? "I need the two teams and a supported market." : "Necesito los dos equipos y un mercado soportado.";
 }
 
@@ -67,7 +68,7 @@ export function createPredictionChatService({
   }
 
   async function saveClarification({ conversationId, requestId, parsed, reason, options, language }) {
-    const content = clarificationText(reason, language);
+    const content = clarificationText(reason, language, options?.length || 0);
     const base = { kind: "clarification", conversationId, clarification: { reason, options } };
     const assistant = await conversationService.addMessage({
       conversationId, role: "assistant", type: "clarification", content,
@@ -97,8 +98,9 @@ export function createPredictionChatService({
           parsed = parsePredictionQuery(message);
         }
         if (parsed.errors?.length) throw new PredictionValidationError(parsed.errors[0].message, parsed.errors[0]);
+        const eventMissing = parsed.missingFields?.some((field) => field === "homeTeam" || field === "awayTeam");
+        if (eventMissing) return saveClarification({ conversationId, requestId, parsed, reason: "event_incomplete", options: [], language });
         if (parsed.missingFields?.includes("market")) return saveClarification({ conversationId, requestId, parsed, reason: "market_missing", options: MARKET_OPTIONS, language });
-        if (parsed.missingFields?.length) return saveClarification({ conversationId, requestId, parsed, reason: "event_incomplete", options: [], language });
         phaseDurations.parseMs = Date.now() - phaseStarted;
 
       phaseStarted = Date.now();
@@ -130,6 +132,7 @@ export function createPredictionChatService({
           selections: prediction.selections,
           confidence: prediction.confidence,
           expectedGoals: prediction.expectedGoals,
+          expectedCounts: prediction.expectedCounts,
           edgeStatus: prediction.edgePolicy?.status,
           marketStatus: prediction.model?.marketStatus,
         },

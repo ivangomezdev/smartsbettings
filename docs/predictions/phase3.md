@@ -6,7 +6,7 @@ La vista `/predictions` abre Chat por defecto y conserva el feed anterior en `/p
 
 - Provider inicial: OpenAI Responses API.
 - Modelo predeterminado: `gpt-5-mini`.
-- Prompt: `football-predictions-explainer-v1`.
+- Prompt actual: `football-predictions-explainer-v2` (V1 se conserva como versión histórica).
 - Salida: JSON Schema estricto y validación local.
 - Timeout: 20 segundos.
 - Caché: PostgreSQL, 24 horas, fingerprint de análisis, predicción, contexto, prompt, provider y modelo.

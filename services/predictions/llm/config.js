@@ -1,4 +1,5 @@
 export const FOOTBALL_PREDICTIONS_EXPLAINER_V1 = "football-predictions-explainer-v1";
+export const FOOTBALL_PREDICTIONS_EXPLAINER_V2 = "football-predictions-explainer-v2";
 
 export const LLM_CONFIG = Object.freeze({
   provider: "openai",

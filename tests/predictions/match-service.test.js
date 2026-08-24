@@ -42,6 +42,28 @@ test("resuelve equipos exactos y no asume el primer resultado", async () => {
   assert.equal(result.fixture.fixture.id, 100);
 });
 
+test("normaliza Dep. La Coruña al nombre canónico del proveedor", async () => {
+  const searches = [];
+  const sportsApi = {
+    searchTeams: async (name) => {
+      searches.push(name);
+      return apiResult([{ team: { id: name === "Málaga" ? "home" : "away", name, provider: "thesportsdb" } }]);
+    },
+    getResource: async () => apiResult([{
+      ...fixture({ id: "malaga-depor", homeId: "home", awayId: "away" }),
+      teams: { home: { id: "home", name: "Málaga" }, away: { id: "away", name: "Deportivo de A Coruña" } },
+    }]),
+  };
+  const result = await createMatchService({ sportsApi }).resolveFixture({
+    ...parsed(),
+    homeTeam: "Málaga",
+    awayTeam: "dep la coruna",
+  });
+  assert.equal(result.kind, "resolved");
+  assert.deepEqual(searches, ["Málaga", "Deportivo de A Coruña"]);
+  assert.equal(result.teams.away.name, "Deportivo de A Coruña");
+});
+
 test("solicita aclaración para equipos ambiguos o fixture con orden inverso", async () => {
   const ambiguousApi = {
     searchTeams: async (name) => apiResult(name === "Real Madrid"
@@ -145,4 +167,73 @@ test("registra datos faltantes y evita endpoints sin cobertura", async () => {
   assert.ok(!called.includes("injuries"));
   assert.ok(!called.includes("fixtures/lineups"));
   assert.ok(!called.includes("odds"));
+});
+
+test("TheSportsDB completa datos críticos y últimos seis mediante fallback mapeado", async () => {
+  const target = fixture({ id: "tsdb-event" });
+  target.fixture.provider = "thesportsdb";
+  target.fixture.providerIds = { apiFootball: { eventId: "9000" } };
+  target.provider = "thesportsdb";
+  target.teams.home = { id: "ts-home", name: "Real Madrid", provider: "thesportsdb" };
+  target.teams.away = { id: "ts-away", name: "Sevilla", provider: "thesportsdb" };
+  target.league = { id: "ts-league", name: "La Liga", season: "2026-2027" };
+
+  const apiTarget = fixture({ id: 9000, homeId: 541, awayId: 536 });
+  const recent = (teamId, opponentBase) => Array.from({ length: 6 }, (_, index) => fixture({
+    id: opponentBase + index,
+    homeId: teamId,
+    awayId: opponentBase + 100 + index,
+    date: `2026-08-${String(20 - index).padStart(2, "0")}T18:00:00.000Z`,
+    status: "FT",
+    homeGoals: 2,
+    awayGoals: 1,
+  }));
+  const calls = [];
+  const sportsApi = {
+    fallbackProviderName: "api-football",
+    getCapabilities: (provider) => provider === "thesportsdb"
+      ? { seasonStatistics: false, injuries: false, eventLineups: false, odds: false }
+      : { seasonStatistics: true, injuries: true, eventLineups: true, odds: true },
+    getResource: async (resource, params, context = {}) => {
+      calls.push({ resource, params, provider: context.provider });
+      if (resource === "fixtures" && params.id === "9000" && context.provider === "api-football") return apiResult([apiTarget]);
+      if (resource === "fixtures" && params.last && context.provider === "thesportsdb") {
+        const teamId = params.team === "ts-home" ? "ts-home" : "ts-away";
+        return apiResult([fixture({ id: `ts-${teamId}`, homeId: teamId, awayId: "opponent", status: "FT", homeGoals: 1, awayGoals: 0 })]);
+      }
+      if (resource === "fixtures" && params.last && context.provider === "api-football") return apiResult(recent(params.team, params.team === 541 ? 1000 : 2000));
+      if (resource === "teams/statistics") return apiResult({ team: { id: params.team }, league: { id: 140, season: 2026 }, form: "WWDWL", goals: { for: { average: { total: "1.8" } } } });
+      if (resource === "fixtures/headtohead" && context.provider === "thesportsdb") return apiResult([]);
+      if (resource === "fixtures/headtohead" && context.provider === "api-football") return apiResult([recent(541, 3000)[0]]);
+      if (resource === "fixtures/statistics") return apiResult([]);
+      if (resource === "injuries") return apiResult([{ player: { id: 1, name: "Jugador", type: "Injury" }, team: apiTarget.teams.home, fixture: { id: 9000 } }]);
+      if (resource === "fixtures/lineups") return apiResult([{ team: apiTarget.teams.home, startXI: [], substitutes: [] }]);
+      if (resource === "odds") return apiResult([{ fixture: { id: 9000 }, bookmakers: [] }]);
+      if (resource === "fixtures/timeline") return apiResult([]);
+      throw new Error(`Recurso inesperado: ${resource}`);
+    },
+  };
+
+  const snapshot = await createMatchService({ sportsApi }).collectFixtureData({
+    kind: "resolved",
+    provider: "thesportsdb",
+    fixture: target,
+    teams: {
+      home: { id: "ts-home", name: "Real Madrid", provider: "thesportsdb" },
+      away: { id: "ts-away", name: "Sevilla", provider: "thesportsdb" },
+    },
+    market: { code: "over_1_5" },
+    sources: {},
+  });
+
+  assert.equal(snapshot.recentForm.home.sampleSize, 6);
+  assert.equal(snapshot.recentForm.away.sampleSize, 6);
+  assert.equal(snapshot.lastSix.home.length, 6);
+  assert.equal(snapshot.lastSix.away.length, 6);
+  assert.ok(snapshot.seasonStatistics.home);
+  assert.equal(snapshot.h2h.length, 1);
+  assert.equal(snapshot.injuries.length, 1);
+  assert.equal(snapshot.lineups.length, 1);
+  assert.ok(calls.some((call) => call.resource === "fixtures" && call.params.id === "9000" && call.provider === "api-football"));
+  assert.ok(!snapshot.missingData.some((item) => ["homeSeasonStatistics", "awaySeasonStatistics", "h2h", "injuries", "lineups"].includes(item.section)));
 });

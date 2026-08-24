@@ -20,7 +20,11 @@ function harness({ preparedKind = "snapshot", existing = null, rateError = null,
     lastClarification: async () => lastClarification,
     updateTitle: async () => ({}),
   };
-  const analysisDataService = { prepareSnapshot: async ({ parsed }) => preparedKind === "snapshot" ? { kind: "snapshot", analysisId: "analysis-1", fixture: event, market: parsed.market, snapshot } : { kind: "clarification", reason: "fixture_ambiguous", options: [{ id: 10, label: "Alpha vs Beta" }] } };
+  const analysisDataService = { prepareSnapshot: async ({ parsed }) => preparedKind === "snapshot"
+    ? { kind: "snapshot", analysisId: "analysis-1", fixture: event, market: parsed.market, snapshot }
+    : preparedKind === "not_found"
+      ? { kind: "not_found", reason: "fixture_not_found", options: [] }
+      : { kind: "clarification", reason: "fixture_ambiguous", options: [{ id: 10, label: "Alpha vs Beta" }] } };
   const predictionService = { predict: async ({ market }) => ({ status: "completed", modelVersion: market.code === "one_x_two" ? "football-poisson-v1" : "football-poisson-v2", model: { marketStatus: "SUPPORTED" }, market: market.code, selections: [{ key: "over_1_5", label: "Over 1.5", probability: 0.72, fairOdds: 1.39, marketOdds: 1.5, theoreticalEdge: 0.08 }], confidence: { level: "medium" }, expectedGoals: { home: 1.5, away: 1.1 }, edgePolicy: { status: "UNVALIDATED" }, positiveFactors: [], negativeFactors: [] }) };
   const historyService = { completeAnalysis: async (value) => { completed = value; } };
   const service = createPredictionChatService({ conversationService, requestLimitService: { reserve: async () => { if (rateError) throw rateError; } }, analysisDataService, predictionService, historyService, llmService: { explain: async () => ({ explanation: fixedExplanation, fingerprint: "f".repeat(64), llm: { model: "mock", promptVersion: "football-predictions-explainer-v1", fallbackUsed: false }, usage: { providerCalls: 1 } }) }, logger: () => {} });
@@ -62,6 +66,21 @@ test("solicita mercado faltante y reanuda desde una selección estructurada", as
   assert.ok(clarification.clarification.options.some((item) => item.id === "over_1_5"));
   const result = await h.service.process({ userId: "u1", conversationId: "c1", message: "Over 1.5", selection: { type: "market", id: "over_1_5" }, requestId: "req-b" });
   assert.equal(result.kind, "analysis");
+});
+
+test("una consulta incompleta prioriza los equipos y un fixture inexistente no ofrece opciones vacías", async () => {
+  const incomplete = harness();
+  const missingTeams = await incomplete.service.process({ userId: "u1", conversationId: "c1", message: "Barcelona", requestId: "missing-teams" });
+  assert.equal(missingTeams.clarification.reason, "event_incomplete");
+  assert.deepEqual(missingTeams.clarification.options, []);
+  assert.equal(missingTeams.message.content, "Necesito los dos equipos y un mercado soportado.");
+
+  const notFound = harness({ preparedKind: "not_found" });
+  const result = await notFound.service.process({ userId: "u1", conversationId: "c1", message: "Málaga vs Deportivo La Coruña Over 2.5", requestId: "not-found" });
+  assert.equal(result.clarification.reason, "fixture_not_found");
+  assert.deepEqual(result.clarification.options, []);
+  assert.match(result.message.content, /No encontré ese partido/);
+  assert.doesNotMatch(result.message.content, /Cuál de estos partidos/);
 });
 
 test("persiste un error público y aplica rate limit antes de reservar mensaje", async () => {

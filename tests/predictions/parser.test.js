@@ -31,7 +31,13 @@ test("soporta todos los mercados aprobados", () => {
     ["Under 1.5", "under_1_5"],
     ["menos de 2,5", "under_2_5"],
     ["BTTS", "btts"],
+    ["BTTS No", "btts_no"],
     ["1 X 2", "one_x_two"],
+    ["Doble oportunidad 1X", "double_chance_1x"],
+    ["DNB visitante", "draw_no_bet_away"],
+    ["local Over 1.5 goles", "home_over_1_5"],
+    ["Over 4.5 tarjetas", "cards_over_4_5"],
+    ["esquinas Under 9.5", "corners_under_9_5"],
   ]);
 
   for (const [marketText, code] of cases) {
@@ -61,7 +67,8 @@ test("interpreta fechas relativas, numéricas, por mes y día de semana", () => 
 test("reporta fechas, deportes y mercados no soportados", () => {
   assert.equal(parse("A vs B Over 1.5 31/02/2026").errors[0].code, "INVALID_DATE");
   assert.equal(parse("Lakers vs Celtics NBA Over 1.5").errors[0].code, "UNSUPPORTED_SPORT");
-  assert.equal(parse("A vs B Under 3.5").errors[0].code, "UNSUPPORTED_MARKET");
+  assert.equal(parse("A vs B Under 6.5").errors[0].code, "UNSUPPORTED_MARKET");
+  assert.equal(parse("A vs B BTTS primer tiempo").errors[0].reason, "UNSUPPORTED_PERIOD");
 });
 
 test("marca campos ausentes sin inventarlos", () => {

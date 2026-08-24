@@ -31,6 +31,19 @@ test("selecciona la mejor cuota decimal válida", () => {
   });
 });
 
+test("no mezcla cuotas de totales del equipo local y visitante", () => {
+  const snapshot = createFullSnapshot();
+  snapshot.odds = [{
+    bookmaker: { name: "Book" },
+    markets: [
+      { name: "Home Team Total Goals", values: [{ label: "Over 1.5", odds: 1.8 }] },
+      { name: "Away Team Total Goals", values: [{ label: "Over 1.5", odds: 2.4 }] },
+    ],
+  }];
+  assert.equal(findBestMarketOdds(snapshot, "home_over_1_5").marketOdds, 1.8);
+  assert.equal(findBestMarketOdds(snapshot, "away_over_1_5").marketOdds, 2.4);
+});
+
 test("genera una selección uniforme para Over y no usa odds como predictor", async () => {
   const snapshot = createFullSnapshot();
   const service = createPredictionService({ historyService: {}, now: fixedNow });
@@ -66,7 +79,7 @@ test("router selecciona V2 para goles y V1 para 1X2 conservando overrides", asyn
   assert.equal(automaticOver.modelVersion, "football-poisson-v2");
   assert.equal(automaticOver.model.selectedBy, "market-router");
   assert.equal(automaticOver.model.marketStatus, "SUPPORTED");
-  assert.equal(automaticOver.model.routerVersion, "football-market-router-v1");
+  assert.equal(automaticOver.model.routerVersion, "football-market-router-v2");
   assert.equal(automaticOver.model.configFingerprint.length, 64);
   assert.ok(["high", "medium", "low"].includes(automaticOver.confidence.level));
   assert.equal(automaticOneXTwo.modelVersion, "football-poisson-v1");
@@ -159,5 +172,40 @@ test("persiste el resultado cuando recibe analysisId", async () => {
   });
   assert.equal(persisted.analysisId, "analysis-1");
   assert.equal(persisted.result, result);
-  assert.equal(persisted.result.model.routerVersion, "football-market-router-v1");
+  assert.equal(persisted.result.model.routerVersion, "football-market-router-v2");
+});
+
+test("deriva BTTS No, doble oportunidad, DNB y totales de equipo de forma consistente", async () => {
+  const service = createPredictionService({ historyService: {}, now: fixedNow });
+  const snapshot = createFullSnapshot();
+  const [yes, no, oneXTwo, chance, dnb, teamTotal] = await Promise.all([
+    service.predict({ snapshot, market: { code: "btts" } }),
+    service.predict({ snapshot, market: { code: "btts_no" } }),
+    service.predict({ snapshot, market: { code: "one_x_two" } }),
+    service.predict({ snapshot, market: { code: "double_chance_1x" } }),
+    service.predict({ snapshot, market: { code: "draw_no_bet_home" } }),
+    service.predict({ snapshot, market: { code: "home_over_1_5" } }),
+  ]);
+  assert.ok(Math.abs(yes.selections[0].probability + no.selections[0].probability - 1) < 1e-12);
+  assert.ok(Math.abs(chance.selections[0].probability - (oneXTwo.selections[0].probability + oneXTwo.selections[1].probability)) < 1e-12);
+  assert.ok(dnb.selections[0].probability > 0 && dnb.selections[0].probability < 1);
+  assert.equal(dnb.selections[0].pushProbability, oneXTwo.selections[1].probability);
+  assert.ok(teamTotal.selections[0].probability > 0 && teamTotal.selections[0].probability < 1);
+});
+
+test("usa modelos independientes y datos estructurados para tarjetas y corners", async () => {
+  const service = createPredictionService({ historyService: {}, now: fixedNow });
+  const snapshot = createFullSnapshot();
+  const cards = await service.predict({ snapshot, market: { code: "cards_over_4_5" } });
+  const corners = await service.predict({ snapshot, market: { code: "corners_under_9_5" } });
+  assert.equal(cards.modelVersion, "football-cards-poisson-v1");
+  assert.equal(corners.modelVersion, "football-corners-poisson-v1");
+  assert.equal(cards.model.marketStatus, "WEAK");
+  assert.equal(corners.model.marketStatus, "WEAK");
+  assert.equal(cards.expectedCounts.statistic, "cards");
+  assert.equal(corners.expectedCounts.statistic, "corners");
+  assert.ok(cards.expectedCounts.total > 0);
+  assert.ok(corners.expectedCounts.total > 0);
+  assert.equal(cards.context.statistics.usedByModel, true);
+  assert.equal(corners.context.statistics.usedByModel, true);
 });

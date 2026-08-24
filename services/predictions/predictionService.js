@@ -1,6 +1,14 @@
-import { assessConfidence } from "../../lib/predictions/confidence.js";
+import { assessConfidence, assessCountConfidence } from "../../lib/predictions/confidence.js";
+import {
+  FOOTBALL_CARDS_POISSON_V1,
+  FOOTBALL_CORNERS_POISSON_V1,
+  FOOTBALL_COUNT_POISSON_V1_CONFIG_FINGERPRINT,
+  FOOTBALL_COUNT_POISSON_V1_DATASET_VERSION,
+  runFootballCardsPoissonV1,
+  runFootballCornersPoissonV1,
+} from "../../lib/predictions/countMarketModel.js";
 import { deterministicConclusion, generateDeterministicFactors } from "../../lib/predictions/factors.js";
-import { normalizeSearchText } from "../../lib/predictions/markets.js";
+import { normalizeSearchText, SUPPORTED_MARKETS } from "../../lib/predictions/markets.js";
 import { FOOTBALL_POISSON_V1, runFootballPoissonV1 } from "../../lib/predictions/statisticalModel.js";
 import {
   FOOTBALL_POISSON_V2,
@@ -16,16 +24,9 @@ import { modelRouter } from "./modelRouter.js";
 const modelRegistry = new Map([
   [FOOTBALL_POISSON_V1, runFootballPoissonV1],
   [FOOTBALL_POISSON_V2, (snapshot) => runFootballPoissonV2(snapshot, FOOTBALL_POISSON_V2_CANDIDATE_CONFIG)],
+  [FOOTBALL_CORNERS_POISSON_V1, runFootballCornersPoissonV1],
+  [FOOTBALL_CARDS_POISSON_V1, runFootballCardsPoissonV1],
 ]);
-
-const singleMarkets = {
-  over_0_5: { key: "over_0_5", label: "Over 0.5 goles", probabilityKey: "over_0_5" },
-  over_1_5: { key: "over_1_5", label: "Over 1.5 goles", probabilityKey: "over_1_5" },
-  over_2_5: { key: "over_2_5", label: "Over 2.5 goles", probabilityKey: "over_2_5" },
-  under_1_5: { key: "under_1_5", label: "Under 1.5 goles", probabilityKey: "under_1_5" },
-  under_2_5: { key: "under_2_5", label: "Under 2.5 goles", probabilityKey: "under_2_5" },
-  btts: { key: "btts", label: "Ambos equipos marcan: Sí", probabilityKey: "btts" },
-};
 
 function marketCode(market) {
   return typeof market === "string" ? market : market?.code;
@@ -62,6 +63,13 @@ function auditMetadata(version) {
       datasetVersion: FOOTBALL_POISSON_V2_DATASET_VERSION,
     };
   }
+  if ([FOOTBALL_CORNERS_POISSON_V1, FOOTBALL_CARDS_POISSON_V1].includes(version)) {
+    return {
+      configFingerprint: FOOTBALL_COUNT_POISSON_V1_CONFIG_FINGERPRINT,
+      calibrationConfigFingerprint: null,
+      datasetVersion: FOOTBALL_COUNT_POISSON_V1_DATASET_VERSION,
+    };
+  }
   return { configFingerprint: null, calibrationConfigFingerprint: null, datasetVersion: null };
 }
 
@@ -74,7 +82,22 @@ function selectionDefinitions(market, snapshot) {
       { key: "away", label: snapshot.awayTeam?.name || "Visitante", probabilityKey: "away" },
     ];
   }
-  return singleMarkets[code] ? [singleMarkets[code]] : [];
+  const definition = SUPPORTED_MARKETS[code];
+  if (!definition) return [];
+  let label = definition.label;
+  if (definition.teamSide === "home") label = label.replace("Local", snapshot.homeTeam?.name || "Local");
+  if (definition.teamSide === "away") label = label.replace("Visitante", snapshot.awayTeam?.name || "Visitante");
+  if (code === "draw_no_bet_home") label = `Draw No Bet: ${snapshot.homeTeam?.name || "Local"}`;
+  if (code === "draw_no_bet_away") label = `Draw No Bet: ${snapshot.awayTeam?.name || "Visitante"}`;
+  return [{
+    key: code,
+    label,
+    probabilityKey: code,
+    ...(code.startsWith("draw_no_bet_") ? {
+      pushProbabilityKey: "draw",
+      unconditionalWinKey: code.endsWith("home") ? "home" : "away",
+    } : {}),
+  }];
 }
 
 export function calculateFairOdds(probability) {
@@ -94,20 +117,47 @@ function validDecimalOdds(value) {
 
 function betSupportsSelection(betName, selectionKey) {
   const normalized = normalizeSearchText(betName);
+  if (selectionKey.startsWith("cards_")) return /cards|bookings|tarjetas/.test(normalized);
+  if (selectionKey.startsWith("corners_")) return /corners|esquinas/.test(normalized);
+  if (/^(?:home|away)_(?:over|under)_/.test(selectionKey)) return /team total|team goals|total equipo|goles del equipo/.test(normalized);
   if (selectionKey.startsWith("over_") || selectionKey.startsWith("under_")) {
     return /over.?under|total goals|goals over/.test(normalized);
   }
-  if (selectionKey === "btts") return /both teams|btts|ambos/.test(normalized);
+  if (["btts", "btts_no"].includes(selectionKey)) return /both teams|btts|ambos/.test(normalized);
+  if (selectionKey.startsWith("double_chance_")) return /double chance|doble oportunidad/.test(normalized);
+  if (selectionKey.startsWith("draw_no_bet_")) return /draw no bet|dnb|empate no apuesta/.test(normalized);
   return /match winner|1x2|winner/.test(normalized);
 }
 
-function valueMatchesSelection(value, selectionKey, snapshot) {
+function lineSelection(selectionKey) {
+  const match = selectionKey.match(/(?:^|_)(over|under)_(\d+)_(\d+)$/);
+  return match ? { side: match[1], line: `${match[2]}.${match[3]}` } : null;
+}
+
+function valueMatchesSelection(value, selectionKey, snapshot, betName = "") {
   const normalized = normalizeSearchText(value).replace(/\s+/g, " ").trim();
-  if (selectionKey.startsWith("over_") || selectionKey.startsWith("under_")) {
-    const [side, integer, decimal] = selectionKey.split("_");
-    return normalized === `${side} ${integer}.${decimal}` || normalized === `${side} ${integer},${decimal}`;
+  const line = lineSelection(selectionKey);
+  if (line) {
+    const teamTotal = selectionKey.match(/^(home|away)_(?:over|under)_/);
+    if (teamTotal) {
+      const desiredSide = teamTotal[1];
+      const context = normalizeSearchText(`${betName} ${value}`);
+      const homeName = normalizeSearchText(snapshot.homeTeam?.name);
+      const awayName = normalizeSearchText(snapshot.awayTeam?.name);
+      const identifiesHome = /\b(?:home|local)\b/.test(context) || (homeName && context.includes(homeName));
+      const identifiesAway = /\b(?:away|visitante)\b/.test(context) || (awayName && context.includes(awayName));
+      if (desiredSide === "home" ? !identifiesHome || identifiesAway : !identifiesAway || identifiesHome) return false;
+      return new RegExp(`\\b${line.side}\\s*${line.line.replace(".", "[.,]")}\\b`, "i").test(normalized);
+    }
+    return normalized === `${line.side} ${line.line}` || normalized === `${line.side} ${line.line.replace(".", ",")}`;
   }
   if (selectionKey === "btts") return ["yes", "si", "btts yes"].includes(normalized);
+  if (selectionKey === "btts_no") return ["no", "btts no"].includes(normalized);
+  if (selectionKey === "double_chance_1x") return ["home or draw", "1x", "local o empate"].includes(normalized);
+  if (selectionKey === "double_chance_x2") return ["draw or away", "x2", "empate o visitante"].includes(normalized);
+  if (selectionKey === "double_chance_12") return ["home or away", "12", "local o visitante"].includes(normalized);
+  if (selectionKey === "draw_no_bet_home") return ["home", "1", normalizeSearchText(snapshot.homeTeam?.name)].includes(normalized);
+  if (selectionKey === "draw_no_bet_away") return ["away", "2", normalizeSearchText(snapshot.awayTeam?.name)].includes(normalized);
   if (selectionKey === "home") return ["home", "1", normalizeSearchText(snapshot.homeTeam?.name)].includes(normalized);
   if (selectionKey === "draw") return ["draw", "empate", "x"].includes(normalized);
   if (selectionKey === "away") return ["away", "2", normalizeSearchText(snapshot.awayTeam?.name)].includes(normalized);
@@ -120,7 +170,7 @@ export function findBestMarketOdds(snapshot, selectionKey) {
     for (const market of bookmaker.markets || []) {
       if (!betSupportsSelection(market.name, selectionKey)) continue;
       for (const value of market.values || []) {
-        if (!valueMatchesSelection(value.label, selectionKey, snapshot)) continue;
+        if (!valueMatchesSelection(value.label, selectionKey, snapshot, market.name)) continue;
         const odds = validDecimalOdds(value.odds);
         if (odds !== null && (!best || odds > best.marketOdds)) {
           best = {
@@ -149,12 +199,19 @@ function contextualWarnings(snapshot, model) {
   if (!(snapshot.lineups || []).length) {
     warnings.push({ type: "LINEUPS_UNAVAILABLE", message: "No hay alineaciones confirmadas disponibles para este fixture." });
   }
+  if (model.modelFamily === "count_totals") {
+    if ((model.metrics?.recent?.home?.sampleSize || 0) < 3 || (model.metrics?.recent?.away?.sampleSize || 0) < 3) {
+      warnings.push({ type: "COUNT_SAMPLE_SMALL", message: `La muestra reciente de ${model.statistic} es reducida.` });
+    }
+    warnings.push({ type: "COUNT_MODEL_WEAK", message: "El modelo de conteo todavía no tiene clasificación SUPPORTED." });
+    return warnings;
+  }
   if (!model.sources?.xg) warnings.push({ type: "XG_INSUFFICIENT", message: "xG/xGA no se incorporó por ausencia o muestra insuficiente." });
   if (!model.sources?.h2h) warnings.push({ type: "H2H_INSUFFICIENT", message: "H2H no se incorporó por tener menos de tres encuentros válidos." });
   return warnings;
 }
 
-function statisticsContext(snapshot) {
+function statisticsContext(snapshot, model = null) {
   const keys = ["shotsOnTarget", "shotsOffTarget", "totalShots", "corners", "yellowCards", "redCards", "possession"];
   const values = Object.fromEntries(keys.map((key) => [key, []]));
   for (const fixture of snapshot.matchStatistics || []) {
@@ -168,7 +225,8 @@ function statisticsContext(snapshot) {
       key,
       values[key].length ? values[key].reduce((sum, value) => sum + value, 0) / values[key].length : null,
     ])),
-    usedByModel: false,
+    usedByModel: model?.modelFamily === "count_totals",
+    modeledStatistic: model?.modelFamily === "count_totals" ? model.statistic : null,
   };
 }
 
@@ -177,9 +235,15 @@ function mergeMissingData(snapshot, model) {
   const add = (section, reason) => {
     if (!missing.some((item) => item.section === section && item.reason === reason)) missing.push({ section, reason });
   };
-  if (!model.sources?.season) add("seasonStatistics", "not_used_by_model");
-  if (!model.sources?.xg) add("xg", "minimum_sample_not_met");
-  if (!model.sources?.h2h) add("h2h", "minimum_sample_not_met");
+  if (model.modelFamily === "count_totals") {
+    if ((model.metrics?.recent?.home?.sampleSize || 0) < 3 || (model.metrics?.recent?.away?.sampleSize || 0) < 3) {
+      add(model.statistic, "partial_recent_sample");
+    }
+  } else {
+    if (!model.sources?.season) add("seasonStatistics", "not_used_by_model");
+    if (!model.sources?.xg) add("xg", "minimum_sample_not_met");
+    if (!model.sources?.h2h) add("h2h", "minimum_sample_not_met");
+  }
   return missing;
 }
 
@@ -189,7 +253,11 @@ function buildSelections(snapshot, market, probabilities) {
   return definitions.map((definition) => {
     const probability = probabilities[definition.probabilityKey];
     const quote = findBestMarketOdds(snapshot, definition.key);
-    const theoreticalEdge = calculateEdge(probability, quote.marketOdds);
+    const pushProbability = definition.pushProbabilityKey ? probabilities[definition.pushProbabilityKey] : null;
+    const unconditionalWin = definition.unconditionalWinKey ? probabilities[definition.unconditionalWinKey] : null;
+    const theoreticalEdge = definition.unconditionalWinKey && Number.isFinite(quote.marketOdds)
+      ? unconditionalWin * quote.marketOdds + pushProbability - 1
+      : calculateEdge(probability, quote.marketOdds);
     return {
       key: definition.key,
       label: definition.label,
@@ -199,6 +267,7 @@ function buildSelections(snapshot, market, probabilities) {
       bookmaker: quote.bookmaker,
       oddsTimestamp: quote.oddsTimestamp,
       theoreticalEdge,
+      pushProbability,
       edgeStatus: "UNVALIDATED",
       // Alias conservado para consumidores internos anteriores; nunca implica recomendación.
       edge: theoreticalEdge,
@@ -239,6 +308,7 @@ export function createPredictionService({
           model: modelMetadata,
           market: marketCode(market),
           expectedGoals: null,
+          expectedCounts: null,
           selections: [],
           confidence: { level: "low", score: 0, reasons: predictionModel.reasons || [] },
           edgePolicy: { status: "UNVALIDATED", meaning: "El theoreticalEdge es experimental y no constituye una recomendación." },
@@ -251,7 +321,9 @@ export function createPredictionService({
         };
       } else {
         const selections = buildSelections(snapshot, market, predictionModel.probabilities);
-        const confidence = assessConfidence(predictionModel, snapshot);
+        const confidence = predictionModel.modelFamily === "count_totals"
+          ? assessCountConfidence(predictionModel, snapshot)
+          : assessConfidence(predictionModel, snapshot);
         const factors = generateDeterministicFactors({ market, model: predictionModel });
         const warnings = [...contextualWarnings(snapshot, predictionModel), ...webResearchWarnings(snapshot)];
         result = {
@@ -259,6 +331,7 @@ export function createPredictionService({
           modelVersion,
           model: modelMetadata,
           expectedGoals: predictionModel.expectedGoals,
+          expectedCounts: predictionModel.expectedCounts || null,
           market: marketCode(market),
           selections,
           confidence,
@@ -267,7 +340,7 @@ export function createPredictionService({
           warnings,
           missingData: mergeMissingData(snapshot, predictionModel),
           context: {
-            statistics: statisticsContext(snapshot),
+            statistics: statisticsContext(snapshot, predictionModel),
             injuries: snapshot.injuries || [],
             lineups: snapshot.lineups || [],
             web: snapshot.enrichment?.web || null,
